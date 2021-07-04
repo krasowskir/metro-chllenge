@@ -1,13 +1,13 @@
 package com.example.metrochllenge;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
+import java.io.IOException;
+import java.util.List;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.StringTokenizer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.util.Comparator.comparingInt;
@@ -26,9 +26,10 @@ Write a function that takes a 2 strings in, a sentence and a frame symbol, and p
 @SpringBootApplication
 public class DemoApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        String sentence = "Hello Annagret Kramp Karrenbauer, wie gehts?"; //"Hello World in a frame";
+//        String sentence = Files.readString(Paths.get(new ClassPathResource("wiki.txt").getFile().getPath()));//"Hello Annagret Kramp Karrenbauer, wie gehts?";
+        String sentence = "Hello World in a frame"; //"Here, we use a map to extract the artists’ names and then collect the Stream using Collectors.joining.\ This method is a convenience for building up strings from streams. It lets us provide a delimiter (which goes between elements), a prefix for our result, and a suffix for the result.";
         String delim = " ";
         String frameSymbol = "*";
 
@@ -43,80 +44,39 @@ public class DemoApplication {
 
     public static List<String> breakIntoTokens(String fromSentence, String delimChar) {
         StringTokenizer strTok = new StringTokenizer(fromSentence, delimChar);
-
         //Möglichkeit 1
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(strTok.asIterator(),Spliterator.ORDERED), false)
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(strTok.asIterator(), Spliterator.ORDERED), false)
                 .map(Object::toString)
                 .collect(Collectors.toList());
-
-        //Möglichkeit 2
-//        return Stream.iterate(strTok.asIterator(), w -> w.hasNext(), UnaryOperator.identity())
-//                .map(Iterator::next)
-//                .map(e -> e.toString())
-//                .collect(Collectors.toList());
-//        List<String> tokens = new ArrayList<>();
-//
-//        while (strTok.hasMoreTokens()) {
-//            tokens.add(strTok.nextToken());
-//        }
-//        return tokens;
     }
 
     private static int calculateAmountOfCharactersInLongestWord(List<String> elements) {
-
-        //Möglichkeit 1
-        elements.stream()
-                .map(e -> e.toCharArray().length)
-                .mapToInt(Integer::intValue)
-                .max()
-                .getAsInt();
-
-        Function<Integer, Integer> countChars = e -> e;
-
-        //Möglichkeit 2
-        elements.stream()
-                .max(comparingInt(e -> e.toCharArray().length))
-                .get();
-
         //Möglichkeit 3
         return elements
                 .stream()
                 .map(e -> e.toCharArray().length)
-                .max(comparingInt(e -> (Integer)e))
+                .max(comparingInt(e -> e))
                 .get();
 
     }
 
     private static String drawFrame(List<String> tokens, int maxAmountOfChars, String frameSymbol) {
-        StringBuilder strB = new StringBuilder();
-        drawLine(maxAmountOfChars, frameSymbol, strB);
-
-        strB.append(tokens.stream()
-                .map(elem -> prefixAndSuffixTokens(elem, frameSymbol, maxAmountOfChars))
-                .collect(Collectors.joining()));
-
-        drawLine(maxAmountOfChars, frameSymbol, strB);
-        return strB.toString();
+        String prefix = frameSymbol + " ";
+        return drawLine(maxAmountOfChars, frameSymbol) +
+                tokens.stream()
+                        .map(e -> suffixTokens(e, frameSymbol, maxAmountOfChars))
+                        .map(e -> prefix + e)
+                        .collect(Collectors.joining()) +
+                drawLine(maxAmountOfChars, frameSymbol);
     }
 
-    private static void drawLine(int maxAmountOfChars, String frameSymbol, StringBuilder strB) {
+    private static String drawLine(int maxAmountOfChars, String frameSymbol) {
         int extraChars = 4;
-        strB.append(frameSymbol.repeat(maxAmountOfChars));
-        strB.append(frameSymbol.repeat(extraChars));
-        strB.append("\n");
+        return frameSymbol.repeat(maxAmountOfChars + extraChars) + "\n";
     }
 
-    private static String prefixAndSuffixTokens(String token, String frameSymbol, int maxAmountOfChars) {
+    private static String suffixTokens(String token, String frameSymbol, int maxAmountOfChars) {
         int lengthDiff = maxAmountOfChars - token.length();
-        StringBuilder strB = new StringBuilder();
-        strB.append(frameSymbol);
-        strB.append(" ");
-        strB.append(token);
-        strB.append(" ".repeat(lengthDiff + 1));
-        strB.append(frameSymbol);
-        strB.append("\n");
-        return strB.toString();
+        return token + " ".repeat(lengthDiff + 1) + frameSymbol + "\n";
     }
-
-
 }
