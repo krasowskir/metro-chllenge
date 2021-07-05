@@ -1,12 +1,10 @@
 package com.example.metrochllenge;
 
+import challenges.ReverseInt;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -28,17 +26,27 @@ public class DemoApplication {
 
     public static void main(String[] args) throws IOException {
 
-//        String sentence = Files.readString(Paths.get(new ClassPathResource("wiki.txt").getFile().getPath()));//"Hello Annagret Kramp Karrenbauer, wie gehts?";
-        String sentence = "Hello World in a frame"; //"Here, we use a map to extract the artists’ names and then collect the Stream using Collectors.joining.\ This method is a convenience for building up strings from streams. It lets us provide a delimiter (which goes between elements), a prefix for our result, and a suffix for the result.";
-        String delim = " ";
-        String frameSymbol = "*";
+        LeetCode leetCodeChallenge = new LeetCode();
+        ReverseInt challenge1 = new ReverseInt();
+        int num = challenge1.reverse(-321); //1534236469, 123, 321, -321
+        System.out.println("numb: " + num);
+//        List<List<Integer>> liste = leetCodeChallenge.subsetsWithDup(new int[]{1,2,3});
+//        for (List<Integer> elem : liste){
+//            System.out.println("subset: " + elem.toString());
+//        }
 
-        System.out.println(frameSentence(sentence, frameSymbol));
+        //String sentence = Files.readString(Paths.get(new ClassPathResource("wiki.txt").getFile().getPath()));//"Hello Annagret Kramp Karrenbauer, wie gehts?";
+//        String sentence = "Hello World in a frame"; //"Here, we use a map to extract the artists’ names and then collect the Stream using Collectors.joining.\ This method is a convenience for building up strings from streams. It lets us provide a delimiter (which goes between elements), a prefix for our result, and a suffix for the result.";
+//        String delim = " ";
+//        String frameSymbol = "*";
+//
+//        System.out.println(frameSentence(sentence, frameSymbol));
     }
 
     public static String frameSentence(String sentence, String frameSymbol) {
         List<String> tokensFromSentence = breakIntoTokens(sentence, " ");
         int maxAmountOfChars = calculateAmountOfCharactersInLongestWord(tokensFromSentence);
+
         return drawFrame(tokensFromSentence, maxAmountOfChars, frameSymbol);
     }
 
@@ -62,6 +70,9 @@ public class DemoApplication {
 
     private static String drawFrame(List<String> tokens, int maxAmountOfChars, String frameSymbol) {
         String prefix = frameSymbol + " ";
+        tokens.stream()
+                .collect(new StringCollector());
+
         return drawLine(maxAmountOfChars, frameSymbol) +
                 tokens.stream()
                         .map(e -> suffixTokens(e, frameSymbol, maxAmountOfChars))
@@ -72,6 +83,14 @@ public class DemoApplication {
 
     private static String drawLine(int maxAmountOfChars, String frameSymbol) {
         int extraChars = 4;
+        Map<String, Integer> alters = new HashMap<>();
+        alters.put("lidia", 33);
+        alters.put("richard", 30);
+        alters.put("waldemar", 28);
+
+        alters.forEach((key, val) -> System.out.println("key: " + key + " - value: " + val));
+
+        alters.computeIfPresent("ludmlia", (key, val) -> val + 12 );
         return frameSymbol.repeat(maxAmountOfChars + extraChars) + "\n";
     }
 
