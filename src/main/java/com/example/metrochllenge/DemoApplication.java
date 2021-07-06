@@ -1,7 +1,9 @@
 package com.example.metrochllenge;
 
+import challenges.AddToNumbers;
 import challenges.ReverseInt;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import uebung.MyLinkedListExercise;
 
 import java.io.IOException;
 import java.util.*;
@@ -27,9 +29,9 @@ public class DemoApplication {
     public static void main(String[] args) throws IOException {
 
         LeetCode leetCodeChallenge = new LeetCode();
-        ReverseInt challenge1 = new ReverseInt();
-        int num = challenge1.reverse(-321); //1534236469, 123, 321, -321
-        System.out.println("numb: " + num);
+//        ReverseInt challenge1 = new ReverseInt();
+//        int num = challenge1.reverse(-321); //1534236469, 123, 321, -321
+//        System.out.println("numb: " + num);
 //        List<List<Integer>> liste = leetCodeChallenge.subsetsWithDup(new int[]{1,2,3});
 //        for (List<Integer> elem : liste){
 //            System.out.println("subset: " + elem.toString());
@@ -41,6 +43,12 @@ public class DemoApplication {
 //        String frameSymbol = "*";
 //
 //        System.out.println(frameSentence(sentence, frameSymbol));
+
+//        MyLinkedListExercise uebung1 = new MyLinkedListExercise();
+//        uebung1.testLinkedList();
+
+        AddToNumbers uebung2 = new AddToNumbers();
+        System.out.println("Knoten: " + uebung2.testListNode());
     }
 
     public static String frameSentence(String sentence, String frameSymbol) {
