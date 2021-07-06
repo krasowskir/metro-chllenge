@@ -1,7 +1,9 @@
 package challenges;
 
 import java.math.BigInteger;
+import java.nio.CharBuffer;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 /*
 You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order,
@@ -65,10 +67,12 @@ public class AddToNumbers {
             number1Stack.push(ln.val);
             ln = ln.next;
         } while (ln != null);
+//        number1Stack.forEach(elem -> strB.append(number1Stack.pop()));
         int length = number1Stack.size();
         for (int value = 0; value < length; value++){
-            strB.append(number1Stack.pop());
+          strB.append(number1Stack.pop());
         }
+
         return new BigInteger(strB.toString());
     }
 
@@ -93,9 +97,12 @@ public class AddToNumbers {
 
     private Stack<Integer> convertIntegerValIntoStack(BigInteger val) {
         Stack<Integer> numberStack = new Stack<>();
-        for (char cNum : String.valueOf(val).toCharArray()){
-            numberStack.push(Integer.parseInt(String.valueOf(cNum)));
-        }
+
+        CharBuffer.wrap(String.valueOf(val).toCharArray())
+                .chars()
+                .mapToObj(i -> (char)i)
+                .map(elem -> numberStack.push(Character.getNumericValue(elem)))
+                .collect(Collectors.toList());
         return numberStack;
     }
 
