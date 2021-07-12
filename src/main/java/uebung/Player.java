@@ -7,14 +7,16 @@ public class Player {
     private String name;
     private int alter;
     private String[] orte;
+    private String birthPlace;
 
     public Player() {
     }
 
-    public Player(String name, int alter, String[] orte) {
+    public Player(String name, int alter, String[] orte, String birthPlace) {
         this.name = name;
         this.alter = alter;
         this.orte = orte;
+        this.birthPlace = birthPlace;
     }
 
     public String getName() {
@@ -41,12 +43,21 @@ public class Player {
         this.orte = orte;
     }
 
+    public String getBirthPlace() {
+        return birthPlace;
+    }
+
+    public void setBirthPlace(String birthPlace) {
+        this.birthPlace = birthPlace;
+    }
+
     @Override
     public String toString() {
         return "Player{" +
                 "name='" + name + '\'' +
                 ", alter=" + alter +
                 ", orte=" + Arrays.toString(orte) +
+                ", birthPlace='" + birthPlace + '\'' +
                 '}';
     }
 }

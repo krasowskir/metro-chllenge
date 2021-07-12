@@ -50,14 +50,15 @@ public class LongestSubstring {
                 (a, b) -> {
                     if (a.isEmpty()) {
                         a.add(b);
-                    } else if (a.getFirst() == b) {
-                        a.removeFirst();
-                        a.add(b);
-                    } else if (a.contains(b) || a.getLast() == b) {
-                        if (tmpBuffer.get() < a.size()) {
-                            tmpBuffer.set(a.size());
+                    } else if (a.contains(b)) {
+                        if (a.getFirst() == b){
+                            a.removeFirst();
+                        } else {
+                            if (a.getLast() == b && tmpBuffer.get() < a.size()){
+                                tmpBuffer.set(a.size());
+                            }
+                            removeUntilFirst(a, b);
                         }
-                        removeUntilFirst(a, b);
                         a.add(b);
                     } else {
                         a.add(b);

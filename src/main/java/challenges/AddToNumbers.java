@@ -67,7 +67,6 @@ public class AddToNumbers {
             number1Stack.push(ln.val);
             ln = ln.next;
         } while (ln != null);
-//        number1Stack.forEach(elem -> strB.append(number1Stack.pop()));
         int length = number1Stack.size();
         for (int value = 0; value < length; value++){
           strB.append(number1Stack.pop());
