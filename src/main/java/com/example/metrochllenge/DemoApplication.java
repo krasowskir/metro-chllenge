@@ -74,7 +74,7 @@ public class DemoApplication {
         Map<Object, Map<String, List<Player>>> gruppiertePlayer = players.stream()
                 .collect(Collectors.groupingBy(Player::getBirthPlace, new GroupByAccumulator<Player, String>()));
 
-        System.out.println("end");
+        System.out.println("end" + gruppiertePlayer.toString());
     }
 
     public static String frameSentence(String sentence, String frameSymbol) {
