@@ -1,11 +1,10 @@
 package challenges;
 
 import java.nio.CharBuffer;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CrackingCodingInterview {
 
@@ -113,6 +112,92 @@ public class CrackingCodingInterview {
         System.out.println(String.format("länge: %d | elem 1.1: %s",myMap.size(), myMap.get("waldemar", 1)));
     }
 
+
+    /*
+    Palindrome Permutation: Given a string, write a function to check if it is a permutation of a palin­ drome.
+    A palindrome is a word or phrase that is the same forwards and backwards. A permutation is a rearrangement of letters.
+     The palindrome does not need to be limited to just dictionary words.
+    EXAMPLE
+    Input: Tact Coa
+    Output: True (permutations: "taco cat", "atco eta", etc.)
+     */
+    public boolean challenge14(String text){
+
+        String textWithoutWhiteSpaces = text.replaceAll("\\s", "");
+        char[] textAsCharArr = textWithoutWhiteSpaces.toCharArray();
+        if (isPalindrome(textAsCharArr)) return true;
+        for (int i = 0; i < textAsCharArr.length; i++){
+            textAsCharArr = rotateChars(textAsCharArr);
+            isPalindrome(textAsCharArr);
+            if (digDeeper(textAsCharArr, null)) return true;
+        }
+
+        return false;
+    }
+
+    public boolean digDeeper(char[] textAsCharArr, char[] prefix){
+        int length = textAsCharArr.length;
+        char firstChar = textAsCharArr[0];
+        char[] restChars = null;
+        if (length > 1){
+            restChars = Arrays.copyOfRange(textAsCharArr, 1, length);
+        }
+
+        if (length > 1){
+            for (int i = 0; i < length; i++){
+
+                char[] tryPalindrome;
+                char[] newPref = populatePrefix(prefix, firstChar);
+
+                tryPalindrome = new StringBuilder().append(newPref).append(restChars).toString().toCharArray();
+
+                if (isPalindrome(tryPalindrome)){
+                    return true;
+                } else {
+                    if (digDeeper(restChars, newPref)) return true;
+                }
+                restChars = rotateChars(restChars);
+            }
+        } else {
+            char[] tryPalindrome;
+            char[] newPref = populatePrefix(prefix, firstChar);
+            tryPalindrome = new StringBuilder().append(newPref).toString().toCharArray();
+            return isPalindrome(tryPalindrome);
+        }
+        return false;
+    }
+
+    public char[] populatePrefix(char[] prefix, char firstChar) {
+        if (prefix == null){
+            return new char[]{firstChar};
+        } else {
+            int len = prefix.length;
+            char[] newPrefix = new char[len+ 1];
+            System.arraycopy(prefix, 0, newPrefix, 0, len);
+            newPrefix[prefix.length] = firstChar;
+            return newPrefix;
+        }
+    }
+
+    public char[] rotateChars(char[] charArr){
+        int len = charArr.length;
+        char[] tmpChar = new char[len];
+        tmpChar[0] = charArr[len -1];
+        System.arraycopy(charArr, 0, tmpChar, 1, len-1);
+        return tmpChar;
+    }
+
+    public boolean isPalindrome(char[] text){
+        int len = text.length;
+        for (int i = 0; i < len; i++){
+            if (text[i] != text[len - 1 -i]){
+                return false;
+            }
+        }
+        System.out.println("isPalindrome: " + String.valueOf(text) + " -> " + true);
+        return true;
+    }
+
     /*
     One Away: There are three types of edits that can be performed on strings: insert a character, remove a character,
     or replace a character.
@@ -142,13 +227,7 @@ public class CrackingCodingInterview {
 
         while (myIter.hasNext()){
             char currentChar = myIter.next();
-            char nextChar;
-            if (myIter.hasNext()){
-                nextChar = myIter.next();
-                myIter.previous();
-            } else {
-                nextChar = '\0';
-            }
+            char nextChar = initializeNextChar(myIter);
 
             if (currentChar != origTextCharArr[indx]){
 
@@ -190,5 +269,98 @@ public class CrackingCodingInterview {
             amountOfChanges += 1;
         }
         return amountOfChanges;
+    }
+
+    /*
+    String Compression: Implement a method to perform basic string compression using the counts of repeated characters.
+    For example, the string aabcccccaaa would become a2blc5a3. If the "compressed" string would not become smaller than
+    the original string, your method should return the original string.
+    You can assume the string has only uppercase and lowercase letters (a - z).
+     */
+    public String challenge16(String inputText){
+
+        char[] textLetters = inputText.toCharArray();
+        int textLength = inputText.length();
+        ListIterator<Character> textIter = CharBuffer.wrap(inputText.toCharArray())
+                .chars()
+                .mapToObj(i -> (char)i)
+                .collect(Collectors.toList()).listIterator();
+
+        StringBuilder strB = new StringBuilder(textLength);
+
+        while (textIter.hasNext()){
+            char currentChar = textIter.next();
+            char nextChar = initializeNextChar(textIter);
+            int innerIndx = 0;
+
+            if (currentChar == nextChar){
+                while (textIter.hasNext()){
+                    char tmpNextChar;
+                    tmpNextChar = textIter.next();
+                    if (currentChar == tmpNextChar){
+                        innerIndx++;
+                    } else {
+                        textIter.previous();
+                        break;
+                    }
+                }
+            }
+            strB.append(currentChar).append(innerIndx+1);
+        }
+        return strB.toString().length() >= inputText.length() ? inputText : strB.toString();
+
+    }
+
+    private char initializeNextChar(ListIterator<Character> textIter) {
+        char nextChar;
+        if (textIter.hasNext()) {
+            nextChar = textIter.next();
+            textIter.previous();
+        } else {
+            nextChar = '\0';
+        }
+        return nextChar;
+    }
+
+    /*
+    Rotate Matrix: Given an image represented by an NxN matrix, where each pixel in the image is 4 bytes,
+    write a method to rotate the image by 90 degrees. Can you do this in place?
+
+    Matrix um 90° kippen besteht aus zwei Schritten!
+        - matrix transponieren (Zeilen als Spalten schreiben (x mit y vertauschen))
+        - Reihenfolge von den Spalten vertauschen
+    */
+    public String[][] challenge17(String[][] matrix){
+        int yLen = matrix.length;
+        int xLen = matrix[0].length;
+        if (yLen != xLen){
+            throw new RuntimeException("xlen is not equals to ylen");
+        }
+        String[][] transpMatr = transponiereMatrix(matrix);
+        return reverseColumns(transpMatr);
+    }
+
+    public String[][] transponiereMatrix(String[][] matrix) {
+        int len = matrix.length;
+        String[][] transpMatr = new String[len][len];
+
+        for (int i = 0; i < len; i++){
+            for (int j = 0; j < len; j++){
+                transpMatr[j][i] = matrix[i][j];
+            }
+        }
+        return transpMatr;
+    }
+
+    public String[][] reverseColumns(String[][] fromMatrix){
+        int len = fromMatrix.length;
+        String[][] revMatr = new String[len][len];
+
+        for (int i = 0; i < len; i++){
+            for (int j = 0; j < len; j++){
+                revMatr[i][len -1 -j] = fromMatrix[i][j];
+            }
+        }
+        return revMatr;
     }
 }
