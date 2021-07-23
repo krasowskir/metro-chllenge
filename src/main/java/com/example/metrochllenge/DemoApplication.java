@@ -1,10 +1,17 @@
 package com.example.metrochllenge;
 
+import challenges.CrackingCodingInterview;
+import challenges.LongestPalindrom;
+import challenges.MedianOfTwoSortedArrays;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.ClassPathResource;
 import uebung.GroupByAccumulator;
+import uebung.NumberUebung;
 import uebung.Player;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -37,6 +44,7 @@ public class DemoApplication {
 //        }
 
         //String sentence = Files.readString(Paths.get(new ClassPathResource("wiki.txt").getFile().getPath()));//"Hello Annagret Kramp Karrenbauer, wie gehts?";
+        Files.readString(Path.of(new ClassPathResource("wiki.txt").getFile().getPath()));
 //        String sentence = "Hello World in a frame"; //"Here, we use a map to extract the artists’ names and then collect the Stream using Collectors.joining.\ This method is a convenience for building up strings from streams. It lets us provide a delimiter (which goes between elements), a prefix for our result, and a suffix for the result.";
 //        String delim = " ";
 //        String frameSymbol = "*";
@@ -74,7 +82,23 @@ public class DemoApplication {
         Map<Object, Map<String, List<Player>>> gruppiertePlayer = players.stream()
                 .collect(Collectors.groupingBy(Player::getBirthPlace, new GroupByAccumulator<Player, String>()));
 
-        System.out.println("end" + gruppiertePlayer.toString());
+//        System.out.println("end" + gruppiertePlayer.toString());
+//
+//        System.out.println("system envs" + System.getenv());
+//        System.out.println("system properties" + System.getProperties());
+//        NumberUebung uebung7 = new NumberUebung();
+//        uebung7.testBignumbers();
+
+//        MedianOfTwoSortedArrays uebung8 = new MedianOfTwoSortedArrays();
+////        uebung8.findMedian(new int[]{2,5,7}, new int[]{3,6,8});
+
+//        LongestPalindrom uebung9 = new LongestPalindrom();       //babad -> bab
+//        String longPal = uebung9.longestPalindrome("aaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffffgggggggggghhhhhhhhhhiiiiiiiiiijjjjjjjjjjkkkkkkkkkkllllllllllmmmmmmmmmmnnnnnnnnnnooooooooooppppppppppqqqqqqqqqqrrrrrrrrrrssssssssssttttttttttuuuuuuuuuuvvvvvvvvvvwwwwwwwwwwxxxxxxxxxxyyyyyyyyyyzzzzzzzzzzyyyyyyyyyyxxxxxxxxxxwwwwwwwwwwvvvvvvvvvvuuuuuuuuuuttttttttttssssssssssrrrrrrrrrrqqqqqqqqqqppppppppppoooooooooonnnnnnnnnnmmmmmmmmmmllllllllllkkkkkkkkkkjjjjjjjjjjiiiiiiiiiihhhhhhhhhhggggggggggffffffffffeeeeeeeeeeddddddddddccccccccccbbbbbbbbbbaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffffgggggggggghhhhhhhhhhiiiiiiiiiijjjjjjjjjjkkkkkkkkkkllllllllllmmmmmmmmmmnnnnnnnnnnooooooooooppppppppppqqqqqqqqqqrrrrrrrrrrssssssssssttttttttttuuuuuuuuuuvvvvvvvvvvwwwwwwwwwwxxxxxxxxxxyyyyyyyyyyzzzzzzzzzzyyyyyyyyyyxxxxxxxxxxwwwwwwwwwwvvvvvvvvvvuuuuuuuuuuttttttttttssssssssssrrrrrrrrrrqqqqqqqqqqppppppppppoooooooooonnnnnnnnnnmmmmmmmmmmllllllllllkkkkkkkkkkjjjjjjjjjjiiiiiiiiiihhhhhhhhhhggggggggggffffffffffeeeeeeeeeeddddddddddccccccccccbbbbbbbbbbaaaa"); //abac -> aba, abbc -> bb, cabbad -> abba, cabddbac -> cabddbac, cabddba -> abddba, aaa -> aaa, aaaa -> aaaa, caba -> aba, abcba -> abcba
+
+//        System.out.println("longest palindrom: " + longPal);
+
+        CrackingCodingInterview uebung10 = new CrackingCodingInterview();
+//        uebung10.challenge15();
     }
 
     public static String frameSentence(String sentence, String frameSymbol) {

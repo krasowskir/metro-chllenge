@@ -204,4 +204,22 @@ class CrackingCodingInterviewTest {
         System.out.println(String.format("text: %s", text) + " is palindrome: " + testClass.challenge14(text));
         assert testClass.challenge14(text);
     }
+
+    @Test
+    void challenge14_digDeeper_taco_cat() {
+        CrackingCodingInterview testClass =new CrackingCodingInterview();
+        String text = "taco cat";
+        System.out.println(String.format("text: %s", text) + " is palindrome: " + testClass.challenge14(text));
+        assert testClass.challenge14(text);
+    }
+
+    @Test
+    void challenge14_digDeeper_atco_eta() {
+        CrackingCodingInterview testClass =new CrackingCodingInterview();
+        String text = " atco eta";
+        System.out.println(String.format("text: %s", text) + " is palindrome: " + testClass.challenge14(text));
+        assert !testClass.challenge14(text);
+    }
+
+
 }

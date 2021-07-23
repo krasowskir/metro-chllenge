@@ -126,7 +126,7 @@ public class CrackingCodingInterview {
         String textWithoutWhiteSpaces = text.replaceAll("\\s", "");
         char[] textAsCharArr = textWithoutWhiteSpaces.toCharArray();
         if (isPalindrome(textAsCharArr)) return true;
-        for (int i = 0; i < textAsCharArr.length; i++){
+        for (int i = 1; i < textAsCharArr.length; i++){
             textAsCharArr = rotateChars(textAsCharArr);
             isPalindrome(textAsCharArr);
             if (digDeeper(textAsCharArr, null)) return true;
@@ -145,11 +145,8 @@ public class CrackingCodingInterview {
 
         if (length > 1){
             for (int i = 0; i < length; i++){
-
-                char[] tryPalindrome;
                 char[] newPref = populatePrefix(prefix, firstChar);
-
-                tryPalindrome = new StringBuilder().append(newPref).append(restChars).toString().toCharArray();
+                char[] tryPalindrome = new StringBuilder().append(newPref).append(restChars).toString().toCharArray();
 
                 if (isPalindrome(tryPalindrome)){
                     return true;
@@ -159,9 +156,8 @@ public class CrackingCodingInterview {
                 restChars = rotateChars(restChars);
             }
         } else {
-            char[] tryPalindrome;
             char[] newPref = populatePrefix(prefix, firstChar);
-            tryPalindrome = new StringBuilder().append(newPref).toString().toCharArray();
+            char[] tryPalindrome = new StringBuilder().append(newPref).toString().toCharArray();
             return isPalindrome(tryPalindrome);
         }
         return false;
