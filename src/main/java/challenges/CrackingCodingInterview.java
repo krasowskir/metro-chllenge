@@ -4,7 +4,6 @@ import java.nio.CharBuffer;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class CrackingCodingInterview {
 
@@ -112,7 +111,6 @@ public class CrackingCodingInterview {
         System.out.println(String.format("länge: %d | elem 1.1: %s",myMap.size(), myMap.get("waldemar", 1)));
     }
 
-
     /*
     Palindrome Permutation: Given a string, write a function to check if it is a permutation of a palin­ drome.
     A palindrome is a word or phrase that is the same forwards and backwards. A permutation is a rearrangement of letters.
@@ -121,34 +119,28 @@ public class CrackingCodingInterview {
     Input: Tact Coa
     Output: True (permutations: "taco cat", "atco eta", etc.)
      */
-    public boolean challenge14(String text){
+    public boolean challenge14(String text) {
 
         String textWithoutWhiteSpaces = text.replaceAll("\\s", "");
         char[] textAsCharArr = textWithoutWhiteSpaces.toCharArray();
-        if (isPalindrome(textAsCharArr)) return true;
-        for (int i = 1; i < textAsCharArr.length; i++){
-            textAsCharArr = rotateChars(textAsCharArr);
-            isPalindrome(textAsCharArr);
-            if (digDeeper(textAsCharArr, null)) return true;
-        }
-
-        return false;
+        return digDeeper(textAsCharArr, null);
     }
 
-    public boolean digDeeper(char[] textAsCharArr, char[] prefix){
+    public boolean digDeeper(char[] textAsCharArr, char[] prefix) {
+
         int length = textAsCharArr.length;
         char firstChar = textAsCharArr[0];
         char[] restChars = null;
-        if (length > 1){
+        if (length > 1) {
             restChars = Arrays.copyOfRange(textAsCharArr, 1, length);
         }
 
-        if (length > 1){
-            for (int i = 0; i < length; i++){
+        if (length > 1) {
+            for (int i = 0; i < length; i++) {
                 char[] newPref = populatePrefix(prefix, firstChar);
                 char[] tryPalindrome = new StringBuilder().append(newPref).append(restChars).toString().toCharArray();
 
-                if (isPalindrome(tryPalindrome)){
+                if (isPalindrome(tryPalindrome)) {
                     return true;
                 } else {
                     if (digDeeper(restChars, newPref)) return true;
@@ -164,29 +156,29 @@ public class CrackingCodingInterview {
     }
 
     public char[] populatePrefix(char[] prefix, char firstChar) {
-        if (prefix == null){
+        if (prefix == null) {
             return new char[]{firstChar};
         } else {
             int len = prefix.length;
-            char[] newPrefix = new char[len+ 1];
+            char[] newPrefix = new char[len + 1];
             System.arraycopy(prefix, 0, newPrefix, 0, len);
             newPrefix[prefix.length] = firstChar;
             return newPrefix;
         }
     }
 
-    public char[] rotateChars(char[] charArr){
+    public char[] rotateChars(char[] charArr) {
         int len = charArr.length;
         char[] tmpChar = new char[len];
-        tmpChar[0] = charArr[len -1];
-        System.arraycopy(charArr, 0, tmpChar, 1, len-1);
+        tmpChar[0] = charArr[len - 1];
+        System.arraycopy(charArr, 0, tmpChar, 1, len - 1);
         return tmpChar;
     }
 
-    public boolean isPalindrome(char[] text){
+    public boolean isPalindrome(char[] text) {
         int len = text.length;
-        for (int i = 0; i < len; i++){
-            if (text[i] != text[len - 1 -i]){
+        for (int i = 0; i < len; i++) {
+            if (text[i] != text[len - 1 - i]) {
                 return false;
             }
         }
