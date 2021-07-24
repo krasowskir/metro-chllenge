@@ -2,6 +2,11 @@ package challenges;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CrackingCodingInterviewTest {
@@ -221,5 +226,98 @@ class CrackingCodingInterviewTest {
         assert !testClass.challenge14(text);
     }
 
+    @Test
+    void test_challenge21_unique() {
+        CrackingCodingInterview challenge21 = new CrackingCodingInterview();
+        LinkedList<String> fromList = new LinkedList<>(Arrays.asList("Richard", "wie", "hast", "du","heute", "geschlafen"));
+        LinkedList<String> result = challenge21.challenge21(fromList);
+        result.stream()
+                .forEachOrdered(elem -> System.out.println(elem));
+    }
 
+    @Test
+    void test_challenge21_doubles() {
+        CrackingCodingInterview challenge21 = new CrackingCodingInterview();
+        LinkedList<String> fromList = new LinkedList<>(Arrays.asList("Richard", "wie", "hast", "du","heute", "geschlafen", "hast", "du", "das", "auch", "wie", "du", "gelöst"));
+        LinkedList<String> result = challenge21.challenge21(fromList);
+        result.stream()
+                .forEachOrdered(elem -> System.out.println(elem));
+    }
+
+
+    @Test
+    void test_challenge22_unique() {
+        CrackingCodingInterview challenge22 = new CrackingCodingInterview();
+        LinkedList<String> fromList = new LinkedList<>(Arrays.asList("Richard", "wie", "hast", "du","heute", "geschlafen"));
+        LinkedList<String> result = challenge22.challenge22(fromList, 3);
+        result.stream()
+                .forEachOrdered(elem -> System.out.println(elem));
+    }
+
+    @Test
+    void test_challenge22_double() {
+        CrackingCodingInterview challenge22 = new CrackingCodingInterview();
+        LinkedList<String> fromList = new LinkedList<>(Arrays.asList("Richard", "wie", "hast", "du","heute", "geschlafen", "hast", "du", "das", "auch", "wie", "du", "gelöst"));
+        LinkedList<String> result = challenge22.challenge22(fromList, 5);
+        result.stream()
+                .forEach(elem -> System.out.println(elem));
+    }
+
+    @Test
+    void test_challenge23_unique() {
+        CrackingCodingInterview challenge23 = new CrackingCodingInterview();
+        LinkedList<String> fromList = new LinkedList<>(Arrays.asList("Richard", "wie", "hast", "du","heute", "geschlafen"));
+        LinkedList<String> result = challenge23.challenge23(fromList);
+        result.stream()
+                .forEach(elem -> System.out.println(elem));
+    }
+
+    @Test
+    void test_challenge23_tooSmall() {
+        CrackingCodingInterview challenge23 = new CrackingCodingInterview();
+        LinkedList<String> fromList = new LinkedList<>(Arrays.asList("Richard", "wie"));
+        LinkedList<String> result = challenge23.challenge23(fromList);
+        result.stream()
+                .forEach(elem -> System.out.println(elem));
+    }
+
+    @Test
+    void test_challenge23_long() {
+        CrackingCodingInterview challenge23 = new CrackingCodingInterview();
+        LinkedList<String> fromList = new LinkedList<>(Arrays.asList("Richard", "wie", "hast", "du","heute"));
+        LinkedList<String> result = challenge23.challenge23(fromList);
+        result.stream()
+                .forEach(elem -> System.out.println(elem));
+    }
+
+    @Test
+    void test_challenge23_longest() {
+        CrackingCodingInterview challenge23 = new CrackingCodingInterview();
+        LinkedList<String> fromList = new LinkedList<>(Arrays.asList("Richard", "wie", "hast", "du","heute", "geschlafen", "hast", "du", "das", "auch", "wie", "du", "gelöst"));
+        LinkedList<String> result = challenge23.challenge23(fromList);
+        result.stream()
+                .forEach(elem -> System.out.println(elem));
+    }
+
+    @Test
+    void test_challenge24_sorted() {
+        CrackingCodingInterview challenge24 = new CrackingCodingInterview();
+        LinkedList<Integer> fromList = new LinkedList<>(Arrays.asList(2,3,4,5,8,12,88,114, 150));
+        LinkedList<Integer> result = challenge24.challenge24(fromList);
+        List<Integer> sortedRes = result.stream()
+                .peek(System.out::println)
+                .collect(Collectors.toList());
+        assert sortedRes.equals(Arrays.asList(2,3,4,5,8,12,88,114, 150));
+    }
+
+    @Test
+    void test_challenge24_NotSorted() {
+        CrackingCodingInterview challenge24 = new CrackingCodingInterview();
+        LinkedList<Integer> fromList = new LinkedList<>(Arrays.asList(4,2,3,8,5,8,12,88,5,150));
+        LinkedList<Integer> result = challenge24.challenge24(fromList);
+        List<Integer> sortedRes = result.stream()
+                .peek(System.out::println)
+                .collect(Collectors.toList());
+        assert sortedRes.equals(Arrays.asList(2, 3, 4, 5, 5, 8, 8, 12, 88, 150));
+    }
 }

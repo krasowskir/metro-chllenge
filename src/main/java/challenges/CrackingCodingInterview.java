@@ -2,8 +2,10 @@ package challenges;
 
 import java.nio.CharBuffer;
 import java.util.*;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CrackingCodingInterview {
 
@@ -350,5 +352,170 @@ public class CrackingCodingInterview {
             }
         }
         return revMatr;
+    }
+
+    /*
+    R�mov� Dups! Write code to remove duplicates from an unsorted linked list.
+     */
+    public LinkedList<String> challenge21(LinkedList<String> fromList){
+
+        Collections.sort(fromList);
+        ListIterator<String> iter = fromList.listIterator();
+
+        while (iter.hasNext()){
+            String currentNode = iter.next();
+            String nextNode;
+            if (iter.hasNext()){
+                nextNode = iter.next();
+                iter.previous();
+            } else {
+                nextNode = "";
+            }
+
+            if (currentNode.equals(nextNode)){
+                int rollbIndx = 0;
+                while (iter.hasNext()){
+                    String tmpNext = iter.next();
+                    if (!tmpNext.equals(currentNode)){
+                        iter.previous();
+                        break;
+                    }
+                    rollbIndx += 1;
+                }
+                rollbackAndRemove(iter, rollbIndx);
+            }
+        }
+
+        return fromList;
+    }
+
+    private void rollbackAndRemove(ListIterator<String> iter, int to){
+        for (int i = 0; i < to; i++){
+           iter.previous();
+           iter.remove();
+        }
+    }
+
+    /*
+    Return Kth to Last: Implement an algorithm to find the kth to last element of a singly linked list.
+     */
+    public LinkedList<String> challenge22(LinkedList<String> fromList, int k){
+        ListIterator<String> iter = fromList.listIterator(k);
+        LinkedList<String> result = new LinkedList<>();
+        Stream.iterate(iter, w -> w.hasNext(), UnaryOperator.identity())
+                .map(indx -> indx.next())
+                .forEach(elem -> result.add(elem));
+
+        return result;
+    }
+
+    /*
+    Delete Middle Node: Implement an algorithm to delete a node in the middle (i.e., any node but the first and last node,
+    not necessarily the exact middle) of a singly linked list, given only access to that node.
+
+    EXAMPLE
+    lnput:the node c from the linked list a->b->c->d->e->f
+    Result: nothing is returned, but the new linked list looks like a->b->d->e- >f
+     */
+    public LinkedList<String> challenge23(LinkedList<String> fromList){
+        int len = fromList.size();
+        int indx = 1;
+        boolean isEven = len % 2 == 0;
+        ListIterator<String> iter = fromList.listIterator();
+
+        while (iter.hasNext()){
+            String currentNode = iter.next();
+            if (isEven){
+                if (indx == (len / 2) && iter.hasNext()){
+                    iter.previous();
+                    if (iter.hasPrevious()){
+                        iter.remove();
+                    } else {
+                        iter.next();
+                    }
+                }
+            } else {
+                if (indx == ((len / 2)+1) && iter.hasPrevious()){
+                    iter.next();
+                    if (iter.hasNext()){
+                        iter.previous();
+                        iter.previous();
+                        iter.remove();
+                    } else {
+                        iter.previous();
+                    }
+                }
+            }
+            indx += 1;
+        }
+        return fromList;
+    }
+
+
+    /*
+    Partition: Write code to partition a linked list around a value x,
+    such that all nodes less than x come before all nodes greater than or equal to x. If x is contained within the list,
+    the values of x only need to be after the elements less than x (see below).
+    The partition element x can appear anywhere in the "right partition";
+    it does not need to appear between the left and right partitions.
+
+    EXAMPLE
+    Input: 3 -> 5 -> 8 -> 5 -> 10 -> 2 -> 1[partition=5]
+    Output: 3 -> 1 -> 2 -> 10 -> 5 -> 5 -> 8
+     */
+    public LinkedList<Integer> challenge24(LinkedList<Integer> fromList){
+        //Insertion sort
+        ListIterator<Integer> iter = fromList.listIterator();
+        while (iter.hasNext()){
+            int currentNode = iter.next();
+            int nextNode;
+            if (iter.hasNext()){
+                nextNode = iter.next();
+                iter.previous();
+            } else {
+                nextNode = Integer.MAX_VALUE;
+            }
+
+            if (currentNode > nextNode){
+                iter = shiftNode(nextNode, iter);
+            }
+        }
+        return fromList;
+    }
+
+    public ListIterator<Integer> shiftNode(int val, ListIterator<Integer> iterator){
+        int indx = iterator.nextIndex();
+        removeNextNode(iterator);
+        boolean added = false;
+        while (iterator.hasPrevious()){
+            int prevVal = iterator.previous();
+            if (prevVal > val){
+                added = false;
+            } else if (prevVal < val){
+                iterator.next();
+                iterator.add(val);
+                added = true;
+                break;
+            }
+        }
+        if (!added){
+            iterator.add(val);
+        }
+        return setIteratorBackToOriginalIndex(iterator, indx);
+    }
+
+    private void removeNextNode(ListIterator<Integer> iterator){
+        iterator.next();
+        iterator.remove();
+        iterator.previous();
+    }
+
+    private ListIterator<Integer> setIteratorBackToOriginalIndex(ListIterator<Integer> iterator, int toIndex){
+        int currentIndx = iterator.nextIndex();
+        while (currentIndx != toIndex){
+            iterator.next();
+            currentIndx += 1;
+        }
+        return iterator;
     }
 }
