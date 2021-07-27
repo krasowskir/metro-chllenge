@@ -322,6 +322,17 @@ class CrackingCodingInterviewTest {
     }
 
     @Test
+    void test_challenge24_longer_notSorted() {
+        CrackingCodingInterview challenge24 = new CrackingCodingInterview();
+        LinkedList<Integer> fromList = new LinkedList<>(Arrays.asList(4,2,10,1,3,8,5,8,7,7,12,88,5,150));
+        LinkedList<Integer> result = challenge24.challenge24(fromList);
+        List<Integer> sortedRes = result.stream()
+                .peek(System.out::println)
+                .collect(Collectors.toList());
+        assert sortedRes.equals(Arrays.asList(1,2, 3, 4, 5, 5, 7,7, 8, 8, 10, 12, 88, 150));
+    }
+
+    @Test
     void test_challenge24_arr() {
         CrackingCodingInterview testClass = new CrackingCodingInterview();
         int[] tmpArr = testClass.challenge24(new int[]{4,2,3,8,5,8,12,88,5,150});

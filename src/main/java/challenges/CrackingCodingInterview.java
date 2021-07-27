@@ -502,43 +502,24 @@ public class CrackingCodingInterview {
             } else {
                 nextNode = Integer.MAX_VALUE;
             }
+
             if (currentNode > nextNode){
-                iter = shiftNode(nextNode, iter);
+                iter.remove();
+                iter = shiftNodeFromLeft(nextNode, fromList.listIterator(0));
             }
         }
         return fromList;
     }
 
-    public ListIterator<Integer> shiftNode(int val, ListIterator<Integer> iterator){
-        int indx = iterator.nextIndex();
-        removeNextNode(iterator);
-        if (iterator.hasPrevious()){
-            while (iterator.hasPrevious()){
-                int prevVal = iterator.previous();
-                if (prevVal > val){ }
-                else if (prevVal < val){
-                    iterator.next();
-                    iterator.add(val);
-                    break;
-                }
+    public ListIterator<Integer> shiftNodeFromLeft(int val, ListIterator<Integer> iterator){
+        while (iterator.hasNext()){
+            int currentVal = iterator.next();
+
+            if (currentVal > val){
+                iterator.previous();
+                iterator.add(val);
+                break;
             }
-        } else {
-            iterator.add(val);
-        }
-        return setIteratorBackToOriginalIndex(iterator, indx);
-    }
-
-    private void removeNextNode(ListIterator<Integer> iterator){
-        iterator.next();
-        iterator.remove();
-        iterator.previous();
-    }
-
-    private ListIterator<Integer> setIteratorBackToOriginalIndex(ListIterator<Integer> iterator, int toIndex){
-        int currentIndx = iterator.nextIndex();
-        while (currentIndx != toIndex){
-            iterator.next();
-            currentIndx += 1;
         }
         return iterator;
     }
