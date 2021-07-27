@@ -320,4 +320,28 @@ class CrackingCodingInterviewTest {
                 .collect(Collectors.toList());
         assert sortedRes.equals(Arrays.asList(2, 3, 4, 5, 5, 8, 8, 12, 88, 150));
     }
+
+    @Test
+    void test_challenge24_arr() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        int[] tmpArr = testClass.challenge24(new int[]{4,2,3,8,5,8,12,88,5,150});
+        System.out.println("erg arr" + Arrays.toString(tmpArr));
+        assert Arrays.equals(tmpArr, new int[]{2, 3, 4, 5, 5, 8, 8, 12, 88, 150});
+    }
+
+    @Test
+    void test_challenge24_arr_another() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        int[] tmpArr = testClass.challenge24(new int[]{4,2,10,1,3,8,5,8,7,7,12,88,5,150});
+        System.out.println("erg arr" + Arrays.toString(tmpArr));
+        assert Arrays.equals(tmpArr, new int[]{1,2, 3, 4, 5, 5, 7,7, 8, 8, 10, 12, 88, 150});
+    }
+
+    @Test
+    void test_challenge24_arr_reversed() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        int[] tmpArr = testClass.challenge24(new int[]{150,5,88,12,8,5,8,3,2,4});
+        System.out.println("erg arr" + Arrays.toString(tmpArr));
+        assert Arrays.equals(tmpArr, new int[]{2, 3, 4, 5, 5, 8, 8, 12, 88, 150});
+    }
 }

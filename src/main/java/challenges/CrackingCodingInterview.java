@@ -452,6 +452,33 @@ public class CrackingCodingInterview {
     }
 
 
+    public int[] challenge24(int[] fromArr) {
+        int len = fromArr.length;
+        for (int i = 1; i < len; i++) {
+            if (fromArr[i - 1] > fromArr[i]) {
+                fromArr = replaceVal(fromArr, i);
+            }
+        }
+        return fromArr;
+    }
+
+    protected int[] replaceVal(int[] fromArr, int indx) {
+        int val = fromArr[indx];
+        for (int i = 0; i < indx; i++) {
+            if (fromArr[i] >= val) {
+                int tmp = fromArr[i];
+                if (indx - i > 1) {
+                    System.arraycopy(fromArr, i, fromArr, i + 1, indx - (i));
+                }
+                fromArr[i] = val;
+                fromArr[i + 1] = tmp;
+                System.arraycopy(fromArr, i + 2, fromArr, i + 2, fromArr.length - (indx + 1));
+                return fromArr;
+            }
+        }
+        return fromArr;
+    }
+
     /*
     Partition: Write code to partition a linked list around a value x,
     such that all nodes less than x come before all nodes greater than or equal to x. If x is contained within the list,
@@ -475,7 +502,6 @@ public class CrackingCodingInterview {
             } else {
                 nextNode = Integer.MAX_VALUE;
             }
-
             if (currentNode > nextNode){
                 iter = shiftNode(nextNode, iter);
             }
@@ -486,19 +512,17 @@ public class CrackingCodingInterview {
     public ListIterator<Integer> shiftNode(int val, ListIterator<Integer> iterator){
         int indx = iterator.nextIndex();
         removeNextNode(iterator);
-        boolean added = false;
-        while (iterator.hasPrevious()){
-            int prevVal = iterator.previous();
-            if (prevVal > val){
-                added = false;
-            } else if (prevVal < val){
-                iterator.next();
-                iterator.add(val);
-                added = true;
-                break;
+        if (iterator.hasPrevious()){
+            while (iterator.hasPrevious()){
+                int prevVal = iterator.previous();
+                if (prevVal > val){ }
+                else if (prevVal < val){
+                    iterator.next();
+                    iterator.add(val);
+                    break;
+                }
             }
-        }
-        if (!added){
+        } else {
             iterator.add(val);
         }
         return setIteratorBackToOriginalIndex(iterator, indx);
