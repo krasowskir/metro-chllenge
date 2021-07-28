@@ -2,10 +2,11 @@ package challenges;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -354,5 +355,136 @@ class CrackingCodingInterviewTest {
         int[] tmpArr = testClass.challenge24(new int[]{150,5,88,12,8,5,8,3,2,4});
         System.out.println("erg arr" + Arrays.toString(tmpArr));
         assert Arrays.equals(tmpArr, new int[]{2, 3, 4, 5, 5, 8, 8, 12, 88, 150});
+    }
+
+    @Test
+    void test_challenge25_happyPath() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        LinkedList<Integer> number1 = new LinkedList<>(Arrays.asList(2,3,1));
+        LinkedList<Integer> number2 = new LinkedList<>(Arrays.asList(4,6,6));
+
+        LinkedList<Integer> sum = testClass.challenge25(number1, number2);
+        Collector<Character, LinkedList<Integer>, LinkedList<Integer>> charToLkListCollector = Collector.of(
+                LinkedList::new,
+                (a,b) -> a.add(Character.digit(b,10)),
+                (c,d) -> c
+        );
+
+        LinkedList<Integer> endResult = Stream.iterate(sum.descendingIterator(), i -> i.hasNext(), UnaryOperator.identity())
+                .map(i -> i.next())
+                .map(i -> Character.forDigit(i,10))
+                .collect(charToLkListCollector);
+        ListIterator<Integer> iterator = endResult.listIterator();
+        Stream.iterate(iterator, iterator1 -> iterator1.hasNext(), UnaryOperator.identity())
+                .map(i -> i.next())
+                .peek(num -> System.out.println(num))
+                .collect(Collectors.toList());
+        assert endResult.equals(new LinkedList<>(Arrays.asList(7, 9, 6)));
+    }
+
+    @Test
+    void test_challenge25_zeroAdd() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        LinkedList<Integer> number1 = new LinkedList<>(Arrays.asList(0));
+        LinkedList<Integer> number2 = new LinkedList<>(Arrays.asList(1,1,1));
+
+        LinkedList<Integer> sum = testClass.challenge25(number1, number2);
+        Collector<Character, LinkedList<Integer>, LinkedList<Integer>> charToLkListCollector = Collector.of(
+                LinkedList::new,
+                (a,b) -> a.add(Character.digit(b,10)),
+                (c,d) -> c
+        );
+
+        LinkedList<Integer> endResult = Stream.iterate(sum.descendingIterator(), i -> i.hasNext(), UnaryOperator.identity())
+                .map(i -> i.next())
+                .map(i -> Character.forDigit(i,10))
+                .collect(charToLkListCollector);
+        ListIterator<Integer> iterator = endResult.listIterator();
+        Stream.iterate(iterator, iterator1 -> iterator1.hasNext(), UnaryOperator.identity())
+                .map(i -> i.next())
+                .peek(num -> System.out.println(num))
+                .collect(Collectors.toList());
+        assert endResult.equals(new LinkedList<>(Arrays.asList(1, 1, 1)));
+    }
+
+    @Test
+    void test_challenge25_taskVal() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        LinkedList<Integer> number1 = new LinkedList<>(Arrays.asList(7,1,6));
+        LinkedList<Integer> number2 = new LinkedList<>(Arrays.asList(5,9,2));
+
+        LinkedList<Integer> sum = testClass.challenge25(number1, number2);
+        Collector<Character, LinkedList<Integer>, LinkedList<Integer>> charToLkListCollector = Collector.of(
+                LinkedList::new,
+                (a,b) -> a.add(Character.digit(b,10)),
+                (c,d) -> c
+        );
+
+        LinkedList<Integer> endResult = Stream.iterate(sum.descendingIterator(), Iterator::hasNext, UnaryOperator.identity())
+                .map(Iterator::next)
+                .map(i -> Character.forDigit(i,10))
+                .collect(charToLkListCollector);
+
+        Stream.iterate(endResult.listIterator(), ListIterator::hasNext, UnaryOperator.identity())
+                .map(ListIterator::next)
+                .peek(System.out::println)
+                .collect(Collectors.toList());
+
+        assert sum.equals(new LinkedList<>(Arrays.asList(2, 1, 9)));
+        assert endResult.equals(new LinkedList<>(Arrays.asList(9, 1, 2)));
+    }
+
+    @Test
+    void test_challenge25_forward() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        LinkedList<Integer> number1 = new LinkedList<>(Arrays.asList(6,1,7));
+        LinkedList<Integer> number2 = new LinkedList<>(Arrays.asList(2,9,5));
+
+        LinkedList<Integer> sum = testClass.challenge25_forward(number1, number2);
+        Collector<Character, LinkedList<Integer>, LinkedList<Integer>> charToLkListCollector = Collector.of(
+                LinkedList::new,
+                (a,b) -> a.add(Character.digit(b,10)),
+                (c,d) -> c
+        );
+
+        LinkedList<Integer> endResult = Stream.iterate(sum.descendingIterator(), Iterator::hasNext, UnaryOperator.identity())
+                .map(Iterator::next)
+                .map(i -> Character.forDigit(i,10))
+                .collect(charToLkListCollector);
+
+        Stream.iterate(endResult.listIterator(), ListIterator::hasNext, UnaryOperator.identity())
+                .map(ListIterator::next)
+                .peek(System.out::println)
+                .collect(Collectors.toList());
+
+        assert sum.equals(new LinkedList<>(Arrays.asList(9, 1, 2)));
+    }
+
+    @Test
+    void test_challenge26_palindr() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        LinkedList<Character> text = new LinkedList<>(Arrays.asList('a','b','b','c','d','d','c','b','b','a'));
+        assert testClass.challenge26_isPalindrome(text);
+    }
+
+    @Test
+    void test_challenge26_noPal() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        LinkedList<Character> text = new LinkedList<>(Arrays.asList('r','i','c','h','a','r','d'));
+        assert !testClass.challenge26_isPalindrome(text);
+    }
+
+    @Test
+    void test_challenge26_Pal2() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        LinkedList<Character> text = new LinkedList<>(Arrays.asList('a','a','a'));
+        assert testClass.challenge26_isPalindrome(text);
+    }
+
+    @Test
+    void test_challenge26_noPal2() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        LinkedList<Character> text = new LinkedList<>();
+        assert !testClass.challenge26_isPalindrome(text);
     }
 }

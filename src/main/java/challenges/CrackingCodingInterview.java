@@ -451,7 +451,9 @@ public class CrackingCodingInterview {
         return fromList;
     }
 
-
+    /*
+    challenge24 but with an array. System.arraycopy is needed for array operations
+     */
     public int[] challenge24(int[] fromArr) {
         int len = fromArr.length;
         for (int i = 1; i < len; i++) {
@@ -522,5 +524,95 @@ public class CrackingCodingInterview {
             }
         }
         return iterator;
+    }
+
+    /*
+    Sum Lists: You have two numbers represented by a linked list, where each node contains a single digit.The digits are stored in reverse order,
+    such that the 1 's digit is at the head of the list. Write a function that adds the two numbers and returns the sum as a linked list.
+
+    EXAMPLE
+    Input:(7-> 1 -> 6) + (5 -> 9 -> 2). Thatis,617 + 295.
+    Output:2 -> 1 -> 9.Thatis,912.
+
+    FOLLOW UP
+    Suppose the digits are stored in forward order. Repeat the above problem. EXAMPLE
+    lnput:(6 -> 1 -> 7) + (2 -> 9 -> 5). That is,617 + 295.
+    Output:9 -> 1 -> 2. Thatis,912.
+     */
+    public LinkedList<Integer> challenge25(LinkedList<Integer> num1, LinkedList<Integer> num2){
+        Collector<Integer, StringBuilder, String> digitCollector = Collector.of(
+                StringBuilder::new,
+                StringBuilder::append,
+                StringBuilder::append,
+                StringBuilder::toString
+        );
+        String number1 = Stream.iterate(num1.descendingIterator(), Iterator::hasNext, UnaryOperator.identity())
+                .map(Iterator::next)
+                .collect(digitCollector);
+
+        String number2 = Stream.iterate(num2.descendingIterator(), Iterator::hasNext, UnaryOperator.identity())
+                .map(Iterator::next)
+                .collect(digitCollector);
+        int result = Integer.parseInt(number1) + Integer.parseInt(number2);
+        String reversed = new StringBuilder(String.valueOf(result)).reverse().toString();
+        LinkedList<Integer> resultReversedList = new LinkedList<>();
+        CharBuffer.wrap(reversed.toCharArray())
+                .chars()
+                .map(c -> (char)c)
+                .map(i -> { resultReversedList.add(Character.digit(i, 10)); return i;})
+                .boxed()
+                .collect(Collectors.toList());
+        return resultReversedList;
+    }
+
+    public LinkedList<Integer> challenge25_forward(LinkedList<Integer> num1, LinkedList<Integer> num2){
+        Collector<Integer, StringBuilder, String> digitCollector = Collector.of(
+                StringBuilder::new,
+                StringBuilder::append,
+                StringBuilder::append,
+                StringBuilder::toString
+        );
+        String number1 = Stream.iterate(num1.listIterator(), Iterator::hasNext, UnaryOperator.identity())
+                .map(Iterator::next)
+                .collect(digitCollector);
+
+        String number2 = Stream.iterate(num2.listIterator(), Iterator::hasNext, UnaryOperator.identity())
+                .map(Iterator::next)
+                .collect(digitCollector);
+        int result = Integer.parseInt(number1) + Integer.parseInt(number2);
+
+        LinkedList<Integer> resultReversedList = new LinkedList<>();
+        CharBuffer.wrap(String.valueOf(result).toCharArray())
+                .chars()
+                .map(c -> (char)c)
+                .map(i -> { resultReversedList.add(Character.digit(i, 10)); return i;})
+                .boxed()
+                .collect(Collectors.toList());
+        return resultReversedList;
+    }
+
+    /*
+    Palindrome: Implement a function to check if a linked list is a palindrome.
+     */
+    public boolean challenge26_isPalindrome(LinkedList<Character> text){
+        if (text.size() == 0){
+            return false;
+        }
+        Iterator<Character> reverseIter = text.descendingIterator();
+        Iterator<Character> iter = text.iterator();
+
+        while (iter.hasNext()){
+            char nextChar = iter.next();
+            char revNextChar;
+            if (reverseIter.hasNext()){
+                revNextChar = reverseIter.next();
+            } else {
+                return false;
+            }
+            if (nextChar != revNextChar){
+                return false;
+            }
+        }
+        return true;
     }
 }
