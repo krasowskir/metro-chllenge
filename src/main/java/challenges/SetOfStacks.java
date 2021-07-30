@@ -9,36 +9,36 @@ import java.util.stream.Collectors;
 public class SetOfStacks  {
     private Stack<String>[] stacks;
 
-    private int threashold = 0;
+    private int threshold = 0;
     private int currentPosInStack = 0;
+    private int currentIndxOfStack = 0;
     private Stack<String> currentStack;
-    private int currentIndxOfStack = -1;
 
-    public SetOfStacks(int threashold) {
-        this.threashold = threashold;
-        this.stacks = new Stack[threashold];
+    public SetOfStacks(int threshold) {
+        this.threshold = threshold;
+        this.stacks = new Stack[threshold];
         Arrays.stream(stacks)
                 .map(stack -> { stack = new Stack<>(); return stack;})
                 .collect(Collectors.toList()).toArray(stacks);
 
-        this.currentStack = nextStack();
+        this.currentStack = stacks[0];
     }
 
-    public int getThreashold() {
-        return threashold;
+    public int getThreshold() {
+        return threshold;
     }
 
-    public void setThreashold(int threashold) {
-        this.threashold = threashold;
-        if (this.stacks.length < threashold){
+    public void setThreshold(int threshold) {
+        this.threshold = threshold;
+        if (this.stacks.length < threshold){
             Stack[] tmp = this.stacks;
-            this.stacks = new Stack[threashold];
+            this.stacks = new Stack[threshold];
             System.arraycopy(tmp,0, this.stacks, 0, tmp.length);
         }
     }
 
     public void push(String item){
-        if (currentPosInStack == threashold){
+        if (currentPosInStack == threshold){
             this.currentStack = nextStack();
             currentPosInStack = 0;
         }
@@ -50,7 +50,7 @@ public class SetOfStacks  {
         if (currentPosInStack == 0){
             this.currentIndxOfStack = this.currentIndxOfStack -1;
             currentStack = stacks[currentIndxOfStack];
-            currentPosInStack = threashold;
+            currentPosInStack = threshold;
         }
         this.currentPosInStack = this.currentPosInStack -1;
         return currentStack.pop();
@@ -68,7 +68,7 @@ public class SetOfStacks  {
         this.currentIndxOfStack = this.currentIndxOfStack + 1;
         Optional<Stack<String>> stack = Arrays.stream(stacks)
                 .filter(Objects::nonNull)
-                .filter(elem -> elem.size() < threashold)
+                .filter(elem -> elem.size() < threshold)
                 .findFirst();
 
         return stack.orElseThrow(() -> new RuntimeException("no stacks contained"));
