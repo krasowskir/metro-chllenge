@@ -550,4 +550,74 @@ class CrackingCodingInterviewTest {
         assert 1 == setOfStacks.getCurrentIndxOfStack();
         System.out.println("text4 " +text4+ " pos: " + setOfStacks.getCurrentPosInStack() + " indx: " + setOfStacks.getCurrentIndxOfStack());
     }
+
+    @Test
+    void test_challenge33_shortThreshold() {
+        SetOfStacks setOfStacks = new SetOfStacks(3);
+
+        setOfStacks.push("Hallo");
+        setOfStacks.push("Richard");
+        setOfStacks.push(", wie");
+        setOfStacks.push("gehts");
+        setOfStacks.push("dir?");
+
+        String text1 = setOfStacks.pop();
+        assert 1 == setOfStacks.getCurrentPosInStack();
+        assert 1 == setOfStacks.getCurrentIndxOfStack();
+        System.out.println("text1 " +text1 + " pos: " + setOfStacks.getCurrentPosInStack() + " indx: " + setOfStacks.getCurrentIndxOfStack());
+        String text2 = setOfStacks.pop();
+        assert 0 == setOfStacks.getCurrentPosInStack();
+        assert 1 == setOfStacks.getCurrentIndxOfStack();
+        System.out.println("text2 " +text2+ " pos: " + setOfStacks.getCurrentPosInStack() + " indx: " + setOfStacks.getCurrentIndxOfStack());
+        String text3 = setOfStacks.pop();
+        assert 2 == setOfStacks.getCurrentPosInStack();
+        assert 0 == setOfStacks.getCurrentIndxOfStack();
+        System.out.println("text3 " +text3+ " pos: " + setOfStacks.getCurrentPosInStack() + " indx: " + setOfStacks.getCurrentIndxOfStack());
+    }
+
+    @Test
+    void test_challenge33_longThreshold() {
+        SetOfStacks setOfStacks = new SetOfStacks(7);
+
+        setOfStacks.push("Hallo");
+        setOfStacks.push("Richard");
+        setOfStacks.push(", wie");
+        setOfStacks.push("gehts");
+        setOfStacks.push("dir?");
+        setOfStacks.push("Alles gut");
+        setOfStacks.push("Danke!");
+
+        String text1 = setOfStacks.pop();
+        assert 6 == setOfStacks.getCurrentPosInStack();
+        assert 0 == setOfStacks.getCurrentIndxOfStack();
+        System.out.println("text1 " +text1 + " pos: " + setOfStacks.getCurrentPosInStack() + " indx: " + setOfStacks.getCurrentIndxOfStack());
+        String text2 = setOfStacks.pop();
+        assert 5 == setOfStacks.getCurrentPosInStack();
+        assert 0 == setOfStacks.getCurrentIndxOfStack();
+        System.out.println("text2 " +text2+ " pos: " + setOfStacks.getCurrentPosInStack() + " indx: " + setOfStacks.getCurrentIndxOfStack());
+        String text3 = setOfStacks.pop();
+        assert 4 == setOfStacks.getCurrentPosInStack();
+        assert 0 == setOfStacks.getCurrentIndxOfStack();
+        System.out.println("text3 " +text3+ " pos: " + setOfStacks.getCurrentPosInStack() + " indx: " + setOfStacks.getCurrentIndxOfStack());
+    }
+
+    @Test
+    void test_challenge33_popAt() {
+        SetOfStacks setOfStacks = new SetOfStacks(2);
+
+        setOfStacks.push("Hallo");
+        setOfStacks.push("Richard");
+        setOfStacks.push(", wie");
+        setOfStacks.push("gehts");
+        setOfStacks.push("dir?");
+        setOfStacks.push("Alles gut");
+        setOfStacks.push("Danke!");
+
+        String text1 = setOfStacks.pop();
+        assert 0 == setOfStacks.getCurrentPosInStack();
+        assert 3 == setOfStacks.getCurrentIndxOfStack();
+        System.out.println("text1 " +text1 + " pos: " + setOfStacks.getCurrentPosInStack() + " indx: " + setOfStacks.getCurrentIndxOfStack());
+        assert "gehts".equals(setOfStacks.popAt(1));
+
+    }
 }

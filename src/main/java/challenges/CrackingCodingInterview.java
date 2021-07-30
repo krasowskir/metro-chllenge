@@ -629,7 +629,5 @@ public class CrackingCodingInterview {
      */
     public void challenge33(){
 
-
-
     }
 }
