@@ -630,4 +630,56 @@ public class CrackingCodingInterview {
     public void challenge33(){
 
     }
+
+    /*
+    Queue via Stacks: Implement a MyQueue class which implements a queue using two stacks.
+     */
+    public void challenge34(){
+
+    }
+
+    /*
+    Sort Stack: Write a program to sort a stack such that the smallest items are on the top.
+    You can use an additional temporary stack, but you may not copy the elements into any other data structure (such as an array).
+     The stack supports the following operations: push, pop, peek, and isEmpty.
+     */
+    public Stack<Integer> challenge35(Stack<Integer> unsortedStack){
+        Stack<Integer> sortedStack = new Stack<>();
+
+        while (!unsortedStack.isEmpty()){
+            int currentElem = unsortedStack.pop();
+            if (sortedStack.isEmpty()){
+                sortedStack.push(currentElem);
+            } else if (currentElem > sortedStack.peek()){
+                sortedStack = mergeWithSortedStack(unsortedStack, sortedStack, currentElem);
+            } else {
+                sortedStack.push(currentElem);
+            }
+        }
+
+        while (!sortedStack.isEmpty()){
+            System.out.println("elem: " + sortedStack.pop() + " with size: " + sortedStack.size());
+        }
+        return sortedStack;
+    }
+
+    Stack<Integer> mergeWithSortedStack(Stack<Integer> fromSt, Stack<Integer> toSt, int elem){
+        int len = toSt.size();
+        for (int i = 0; i < len; i++){
+            fromSt.push(toSt.pop());
+        }
+        for (int j = 0; j < len; j++){
+            if (elem < fromSt.peek()){
+                toSt.push(fromSt.pop());
+            } else {
+                toSt.push(elem);
+                toSt.push(fromSt.pop());
+                for (int k = 0; k < len - j -1; k++){
+                    toSt.push(fromSt.pop());
+                }
+                break;
+            }
+        }
+        return toSt;
+    }
 }

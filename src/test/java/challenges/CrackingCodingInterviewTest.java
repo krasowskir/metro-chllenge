@@ -12,8 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CrackingCodingInterviewTest {
 
-
-
     @Test
     void challenge16_aabcccccaaa() {
         CrackingCodingInterview testClass = new CrackingCodingInterview();
@@ -619,5 +617,126 @@ class CrackingCodingInterviewTest {
         System.out.println("text1 " +text1 + " pos: " + setOfStacks.getCurrentPosInStack() + " indx: " + setOfStacks.getCurrentIndxOfStack());
         assert "gehts".equals(setOfStacks.popAt(1));
 
+    }
+
+    @Test
+    void test_challenge33_popAt_With_pop() {
+        SetOfStacks setOfStacks = new SetOfStacks(2);
+
+        setOfStacks.push("Hallo");
+        setOfStacks.push("Richard");
+        setOfStacks.push(", wie");
+        setOfStacks.push("gehts");
+        setOfStacks.push("dir?");
+        setOfStacks.push("Alles gut");
+        setOfStacks.push("Danke!");
+
+        String text1 = setOfStacks.pop();
+        assert text1.equals("Danke!");
+        assert 0 == setOfStacks.getCurrentPosInStack();
+        assert 3 == setOfStacks.getCurrentIndxOfStack();
+        assert "gehts".equals(setOfStacks.popAt(1));
+        assert "Alles gut".equals(setOfStacks.pop());
+        assert "dir?".equals(setOfStacks.pop());
+        assert  ", wie".equals(setOfStacks.pop());
+    }
+
+    @Test
+    void test_challenge34_myQueue() {
+        MyQueue myQueue = new MyQueue();
+        assert myQueue.isEmpty();
+
+        myQueue.add("Richard");
+        myQueue.add("das geht ab");
+        myQueue.add("wir");
+        myQueue.add("feiern die");
+        myQueue.add("ganze Nacht!");
+
+
+        assert myQueue.size() == 3;
+        assert "Richard".equals(myQueue.poll());
+        assert "das geht ab".equals(myQueue.poll());
+        assert "wir".equals(myQueue.poll());
+
+        assert myQueue.contains("ganze Nacht!");
+        assert !myQueue.contains("Richard");
+        assert !myQueue.isEmpty();
+    }
+
+    @Test
+    void test_challenge34_myQueue_few_elems() {
+        MyQueue myQueue = new MyQueue();
+        assert myQueue.isEmpty();
+
+        myQueue.add("Richard");
+        myQueue.add("das geht ab");
+
+        assert myQueue.size() == 0;
+        assert myQueue.contains("Richard");
+
+        assertThrows(RuntimeException.class, () -> {
+            myQueue.element();
+        });
+
+        assert !myQueue.isEmpty();
+    }
+
+    @Test
+    void test_challenge35() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        Stack<Integer> unsortedStack = new Stack<>();
+        unsortedStack.push(0);
+        unsortedStack.push(3);
+        unsortedStack.push(5);
+        unsortedStack.push(5);
+        unsortedStack.push(8);
+        unsortedStack.push(9);
+        unsortedStack.push(2);
+        unsortedStack.push(10);
+        unsortedStack.push(4);
+        unsortedStack.push(20);
+        unsortedStack.push(16);
+        unsortedStack.push(14);
+        unsortedStack.push(12);
+
+        testClass.challenge35(unsortedStack);
+    }
+
+    @Test
+    void teste_mergeWithSortedStack() {
+        CrackingCodingInterview crackingCodingInterview = new CrackingCodingInterview();
+        Stack<Integer> fromStack = new Stack<>();
+        fromStack.push(3);
+        fromStack.push(7);
+
+        Stack<Integer> toStack = new Stack<>();
+        toStack.push(1);
+
+        toStack = crackingCodingInterview.mergeWithSortedStack(fromStack, toStack, 4);
+        assert toStack.pop() == 1;
+        assert toStack.pop() == 4;
+
+    }
+
+    @Test
+    void test_challenge35_longer() {
+        Stack<Integer> unsortedStack = new Stack<>();
+        unsortedStack.push(10);
+        unsortedStack.push(9);
+        unsortedStack.push(8);
+        unsortedStack.push(7);
+        unsortedStack.push(6);
+
+        CrackingCodingInterview crackingCodingInterview = new CrackingCodingInterview();
+        Stack<Integer> result = crackingCodingInterview.challenge35(unsortedStack);
+
+        int[] solution = new int[]{6,7,8,9,10};
+        Iterator<Integer> iter = result.iterator();
+        int i = 0;
+        while (iter.hasNext()){
+            int currentElem = iter.next();
+            assert currentElem == solution[i];
+            i++;
+        }
     }
 }
