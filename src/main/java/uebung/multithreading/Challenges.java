@@ -1,31 +1,38 @@
 package uebung.multithreading;
 
-import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Challenges {
 
-    public class Chopstick{
+    public class Chopstick {
+        /*  ein und derselbe thread, kann 1, 2 und x locks auf dem selben Objekt haben
+         */
         private Lock lock = new ReentrantLock();
         private String name;
 
-        public Chopstick() { }
+        public Chopstick() {
+        }
 
-        public boolean tryAcquire(String name){
-            boolean lockSucceeded = this.lock.tryLock();
-            if (lockSucceeded){
+        public synchronized boolean tryAcquire(String name) throws InterruptedException {
+            boolean lockSucceeded = false;
+            if (!name.equals(this.name)) {
+                lockSucceeded = this.lock.tryLock(1000l, TimeUnit.MILLISECONDS);
+            }
+            if (lockSucceeded) {
                 this.name = name;
             }
             return lockSucceeded;
         }
 
-        public String printWhoHoldsLock(){
+        public String printWhoHoldsLock() {
             return this.name;
         }
 
-        public void putBack(){
+        public synchronized void putBack() {
             this.lock.unlock();
+            this.name = "";
         }
     }
 
@@ -39,45 +46,42 @@ public class Challenges {
 
     /*
     richard setzt sich an Tisch
+    olga setzt sich an Tisch
     lidia setzt sich an Tisch
     tanja setzt sich an Tisch
-    olga setzt sich an Tisch
+    henrietta setzt sich an Tisch
     waldemar setzt sich an Tisch
-    waldemar hat ein Essstäbchen
-    waldemar hat beide Essstäbchen und isst
-    richard hat ein Essstäbchen
-    richard hat beide Essstäbchen und isst
-    lidia hat ein Essstäbchen
-    lidia hat beide Essstäbchen und isst
     tanja hat ein Essstäbchen
-    tanja hat beide Essstäbchen und isst
+    olga hat ein Essstäbchen
+    waldemar hat ein Essstäbchen
+    henrietta hat ein Essstäbchen
+    lidia hat ein Essstäbchen
      */
-    public void challenge153(){
-        Chopstick[] chopsticks = new Chopstick[5];
-        Arrays.fill(chopsticks, new Chopstick());
+    public void challenge153() {
+        Chopstick[] chopsticks = {new Chopstick(),new Chopstick(),new Chopstick(),new Chopstick(),new Chopstick()};
 
         EatingProcess richard = new EatingProcess(chopsticks, "richard");
-        Thread richardT = new Thread(richard);
+        Thread richardT = new Thread(richard, "richard");
         richardT.start();
 
         EatingProcess olga = new EatingProcess(chopsticks, "olga");
-        Thread olgaT = new Thread(olga);
+        Thread olgaT = new Thread(olga, "olga");
         olgaT.start();
 
         EatingProcess lidia = new EatingProcess(chopsticks, "lidia");
-        Thread lidiaT = new Thread(lidia);
+        Thread lidiaT = new Thread(lidia, "lidia");
         lidiaT.start();
 
         EatingProcess waldemar = new EatingProcess(chopsticks, "waldemar");
-        Thread waldemarT = new Thread(waldemar);
+        Thread waldemarT = new Thread(waldemar, "waldemar");
         waldemarT.start();
 
         EatingProcess tanja = new EatingProcess(chopsticks, "tanja");
-        Thread tanjaT = new Thread(tanja);
+        Thread tanjaT = new Thread(tanja, "tanja");
         tanjaT.start();
 
         EatingProcess henrietta = new EatingProcess(chopsticks, "henrietta");
-        Thread henriettaT = new Thread(henrietta);
+        Thread henriettaT = new Thread(henrietta, "henrietta");
         henriettaT.start();
 
         try {
@@ -85,7 +89,7 @@ public class Challenges {
             olgaT.join();
             lidiaT.join();
             waldemarT.join();
-            tanjaT.join();
+//            tanjaT.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

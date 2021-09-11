@@ -1101,6 +1101,16 @@ class CrackingCodingInterviewTest {
         }
     }
 
+    /*
+    richard setzt sich an Tisch
+    olga setzt sich an Tisch
+    lidia setzt sich an Tisch
+    waldemar setzt sich an Tisch
+    tanja setzt sich an Tisch
+    henrietta setzt sich an Tisch
+    tanja hat ein Essstäbchen
+    ... warten unendlich
+     */
     @Test
     void test_challenge153() {
         Challenges challenge = new Challenges();

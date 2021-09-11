@@ -22,8 +22,6 @@ public class EatingProcess implements Runnable {
                 stick1 = grabChopstick(chopsticks, this.name);
                 if (stick1 != null){
                     notAcquired = false;
-                } else {
-                    Thread.sleep(1000);
                 }
             }
             System.out.println(this.name + " hat ein Essstäbchen");
@@ -31,11 +29,10 @@ public class EatingProcess implements Runnable {
             //right chopstick
             notAcquired = true;
             while (notAcquired){
+                Thread.sleep(500);
                 stick2 = grabChopstick(chopsticks, this.name);
-                if (stick2 != null && stick1 != stick2){
+                if (stick2 != null){
                     notAcquired = false;
-                } else {
-                    Thread.sleep(1000);
                 }
             }
             System.out.println(this.name+" hat beide Essstäbchen und isst");
@@ -48,7 +45,7 @@ public class EatingProcess implements Runnable {
     }
 
 
-    private Challenges.Chopstick grabChopstick(Challenges.Chopstick[] chopsticks, String threadName){
+    private Challenges.Chopstick grabChopstick(Challenges.Chopstick[] chopsticks, String threadName) throws InterruptedException {
         for (Challenges.Chopstick elem : chopsticks){
             boolean holdChopstick = elem.tryAcquire(threadName);
             if (holdChopstick){
