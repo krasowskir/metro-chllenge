@@ -1,5 +1,9 @@
 package challenges;
 
+import uebung.multithreading.firstSteps.MeinRunnableThread;
+import uebung.multithreading.firstSteps.MeinThread;
+
+import java.io.IOException;
 import java.nio.CharBuffer;
 import java.util.*;
 import java.util.function.UnaryOperator;
@@ -25,6 +29,20 @@ public class CrackingCodingInterview {
         System.out.println(String.format("Text %s enthält nur einzigartige Zeichen: ", testText) + isUnique);
     }
 
+    public void testCharArrStream(){
+        char[] textChars = "Hello World".toCharArray();
+
+        Collector<Character, StringBuilder, StringBuilder> charColl = Collector.of(
+                StringBuilder::new,
+                StringBuilder::append,
+                StringBuilder::append
+        );
+
+        CharBuffer.wrap(textChars)
+                .chars()
+                .mapToObj(e -> (char)e)
+                .collect(charColl);
+    }
     /*
     Check Permutation: Given two strings,write a method to decide if one is a permutation of the
     other.
@@ -681,5 +699,110 @@ public class CrackingCodingInterview {
             }
         }
         return toSt;
+    }
+
+    /*
+    Animal Shelter: An animal shelter, which holds only dogs and cats, operates on a strictly"first in, first out" basis.
+    People must adopt either the"oldest" (based on arrival time) of all animals at the shelter,
+    or they can select whether they would prefer a dog or a cat (and will receive the oldest animal of that type).
+    They cannot select which specific animal they would like.
+    Create the data structures to maintain this system and implement operations such as enqueue, dequeueAny, dequeueDog, and dequeueCat.
+     You may use the built-in Linked list data structure.
+     */
+    public void challenge36(){
+
+    }
+
+    /*
+    Insertion: You are given two 32-bit numbers, N and M, and two bit positions, i and j.
+    Write a method to insert M into N such that M starts at bit j and ends at bit i.
+    You can assume that the bits j through i have enough space to fit all of M. That is, if M = 10011,
+    you can assume that there are at least 5 bits between j and i. You would not, for example, have j = 3 and i = 2,
+    because M could not fully fit between bit 3 and bit 2.
+
+    EXAMPLE
+    Input: N 10000000000, M 10011, i 2, j 6
+    Output:N = 10001001100
+     */
+    public void challenge51(int n, int m, int i, int j){
+        String number_n = Integer.toBinaryString(n);
+        System.out.println("my number: " + number_n);
+
+    }
+
+    public void testMultiThreading(){
+        MeinRunnableThread thread1 = new MeinRunnableThread(5, "A");
+        MeinRunnableThread thread2 = new MeinRunnableThread(5, "B");
+        thread1.run();
+        thread2.run();
+
+        MeinThread thread3 = new MeinThread(5, "C");
+        MeinThread thread4 = new MeinThread(5, "D");
+        thread3.start();
+        thread4.start();
+        Thread thread5 = new Thread(new MeinRunnableThread(5, "E"));
+        thread5.start();
+
+        Thread threadInner = new Thread(new Runnable() {
+
+        String msg = "F";
+        int count = 5;
+            @Override
+            public void run() {
+                while (count > 0) {
+                    System.out.println(msg);
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException ie) {
+                        System.out.println("IE");
+                    }
+                    count--;
+                }
+            }
+        });
+        threadInner.start();
+        try {
+            thread3.join();
+        } catch (InterruptedException e){
+            System.err.println(e);
+        }
+//        ThreadsDemo3 threadsDemo3 = new ThreadsDemo3("G", 5);
+
+    }
+
+    public static void main(String[] args){
+//        ThreadsDemo3 threadsDemo3 = new ThreadsDemo3("G", 5);
+        MeinThread thread3 = new MeinThread(5, "C");
+        Thread myJoin = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                System.out.println("waiting to read");
+                try {
+                    System.in.read();
+                } catch (IOException e){
+                    System.err.println(e);
+                }
+                System.out.println("finished thread");
+            }
+        });
+        System.out.println("Starting");
+        myJoin.start();
+        thread3.start();
+        System.out.println("joingin");
+        try {
+            myJoin.join();
+        } catch (InterruptedException e){
+            System.err.println(e);
+        }
+        System.out.println("main finished");
+    }
+
+    public void testMultithreading3() throws InterruptedException {
+        MeinThread thread3 = new MeinThread(5, "C");
+        MeinThread thread4 = new MeinThread(5, "D");
+        thread3.start();
+        thread4.start();
+        thread4.join(2000);
     }
 }

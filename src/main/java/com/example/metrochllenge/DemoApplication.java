@@ -1,17 +1,6 @@
 package com.example.metrochllenge;
 
-import challenges.CrackingCodingInterview;
-import challenges.LongestPalindrom;
-import challenges.MedianOfTwoSortedArrays;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.core.io.ClassPathResource;
-import uebung.GroupByAccumulator;
-import uebung.NumberUebung;
-import uebung.Player;
-
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -29,12 +18,12 @@ Write a function that takes a 2 strings in, a sentence and a frame symbol, and p
 * frame *
 *********
  */
-@SpringBootApplication
+//@SpringBootApplication
 public class DemoApplication {
 
     public static void main(String[] args) throws IOException {
 
-        LeetCode leetCodeChallenge = new LeetCode();
+//        LeetCode leetCodeChallenge = new LeetCode();
 //        ReverseInt challenge1 = new ReverseInt();
 //        int num = challenge1.reverse(-321); //1534236469, 123, 321, -321
 //        System.out.println("numb: " + num);
@@ -44,7 +33,7 @@ public class DemoApplication {
 //        }
 
         //String sentence = Files.readString(Paths.get(new ClassPathResource("wiki.txt").getFile().getPath()));//"Hello Annagret Kramp Karrenbauer, wie gehts?";
-        Files.readString(Path.of(new ClassPathResource("wiki.txt").getFile().getPath()));
+//        Files.readString(Path.of(new ClassPathResource("wiki.txt").getFile().getPath()));
 //        String sentence = "Hello World in a frame"; //"Here, we use a map to extract the artists’ names and then collect the Stream using Collectors.joining.\ This method is a convenience for building up strings from streams. It lets us provide a delimiter (which goes between elements), a prefix for our result, and a suffix for the result.";
 //        String delim = " ";
 //        String frameSymbol = "*";
@@ -66,21 +55,21 @@ public class DemoApplication {
 //        MultiDimensionalArray multiDimArrUebung = new MultiDimensionalArray();
 //        multiDimArrUebung.testMultiDimensionalArrays();
 
-//        SquareCalculator uebung5 = new SquareCalculator();
-//        uebung5.calculateSquares();
+        SquareCalculator uebung5 = new SquareCalculator();
+        uebung5.calculateSquares();
 
 //        ZigZag uebung6 = new ZigZag();
 //        uebung6.convertCharArr(new char[][]{{'A', 'B', 'C'}, {'D', 'E', 'F'}, {'G', 'H', 'I'}});
 //        System.out.println("ZigZag text: " + "SUPERGUT -> " + uebung6.convert("SUPERGUT", 3));
 
-        LinkedList<Player> players = new LinkedList<>(Arrays.asList(
-                new Player("lidia", 33, new String[]{"Daugavpils", "Altenberg", "Pirna", "Dublin", "Berlin"}, "Daugavpils"),
-                new Player("waldemar", 28, new String[]{"Daugavpils", "Altenberg", "Dresden"}, "Daugavpils"),
-                new Player("richard", 30, new String[]{"Daugavpils", "Altenberg", "Dresden", "Bonn", "Berlin"}, "Daugavpils"))
-        );
+//        LinkedList<Player> players = new LinkedList<>(Arrays.asList(
+//                new Player("lidia", 33, new String[]{"Daugavpils", "Altenberg", "Pirna", "Dublin", "Berlin"}, "Daugavpils"),
+//                new Player("waldemar", 28, new String[]{"Daugavpils", "Altenberg", "Dresden"}, "Daugavpils"),
+//                new Player("richard", 30, new String[]{"Daugavpils", "Altenberg", "Dresden", "Bonn", "Berlin"}, "Daugavpils"))
+//        );
 
-        Map<Object, Map<String, List<Player>>> gruppiertePlayer = players.stream()
-                .collect(Collectors.groupingBy(Player::getBirthPlace, new GroupByAccumulator<Player, String>()));
+//        Map<Object, Map<String, List<Player>>> gruppiertePlayer = players.stream()
+//                .collect(Collectors.groupingBy(Player::getBirthPlace, new GroupByAccumulator<Player, String>()));
 
 //        System.out.println("end" + gruppiertePlayer.toString());
 //
@@ -97,7 +86,7 @@ public class DemoApplication {
 
 //        System.out.println("longest palindrom: " + longPal);
 
-        CrackingCodingInterview uebung10 = new CrackingCodingInterview();
+//        CrackingCodingInterview uebung10 = new CrackingCodingInterview();
 //        uebung10.challenge15();
     }
 

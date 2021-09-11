@@ -1,6 +1,14 @@
 package challenges;
 
 import org.junit.jupiter.api.Test;
+import uebung.multithreading.Challenges;
+import uebung.multithreading.aufgaben.Tasks;
+import uebung.multithreading.firstSteps.MeinStoppableThread;
+import uebung.multithreading.firstSteps.MeinThread;
+import uebung.multithreading.syncAndLock.*;
+import uebung.multithreading.waitAndNotify.Consumer;
+import uebung.multithreading.waitAndNotify.MyThing;
+import uebung.multithreading.waitAndNotify.Producer;
 
 import java.util.*;
 import java.util.function.UnaryOperator;
@@ -738,5 +746,364 @@ class CrackingCodingInterviewTest {
             assert currentElem == solution[i];
             i++;
         }
+    }
+
+    @Test
+    void test_challenge36_animalShelter() {
+        AnimalShelter animalShelter = new AnimalShelter();
+        animalShelter.enqueue(new AnimalShelter.Animal(AnimalShelter.AnimalType.CAT, "kiki"));
+        animalShelter.enqueue(new AnimalShelter.Animal(AnimalShelter.AnimalType.CAT, "bibi"));
+        animalShelter.enqueue(new AnimalShelter.Animal(AnimalShelter.AnimalType.DOG, "riff"));
+        animalShelter.enqueue(new AnimalShelter.Animal(AnimalShelter.AnimalType.DOG, "wauwu"));
+        animalShelter.enqueue(new AnimalShelter.Animal(AnimalShelter.AnimalType.CAT, "mauzi"));
+
+        assert animalShelter.dequeueAny().getName().equals("kiki");
+        assert animalShelter.dequeueDog().getName().equals("riff");
+        assert animalShelter.dequeueAny().getName().equals("bibi");
+    }
+
+    @Test
+    void test_challenge51() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+//        testClass.challenge51(528, 13, 1,4);
+        testClass.challenge51(-528, 3, 1,2);
+    }
+
+    //======= MULTITHREADING ======= //
+
+    @Test
+    void test_multithreading() {
+        CrackingCodingInterview testClass = new CrackingCodingInterview();
+        testClass.testMultiThreading();
+    }
+
+    @Test
+    void test_multiThreadingSimpleThread() throws InterruptedException {
+        MeinThread thread3 = new MeinThread(5, "C");
+        MeinThread thread4 = new MeinThread(5, "D");
+        thread3.start();
+        thread4.start();
+        thread3.join(2000); // wartet auf diesen Thread!
+    }
+
+    @Test
+    void test_multiThreading3() throws InterruptedException {
+        CrackingCodingInterview testClass3 = new CrackingCodingInterview();
+        testClass3.testMultithreading3();
+    }
+
+    @Test
+    void test_stoppableThread() {
+        MeinStoppableThread stoppableThread = new MeinStoppableThread();
+        stoppableThread.setRunning(true);
+        Thread thread = new Thread(stoppableThread);
+        thread.start();
+        try {
+            Thread.sleep(3000);
+            stoppableThread.setRunning(false);
+        } catch (InterruptedException e){
+
+        }
+    }
+
+    /*
+    === lockATM with concurrent access ===
+    Thread1 atm start
+    Thread2 atm start
+    Thread3 atm start
+    ende sync meth mit thread: thread5
+    new ballance is: 110
+    new ballance is: 125
+    new ballance is: 95
+    Thread3 atm end
+    new ballance is: 105
+    new ballance is: 120
+    new ballance is: 90
+    Thread2 atm end
+    new ballance is: 105
+    new ballance is: 116
+    new ballance is: 96
+    new ballance is: 76
+    Thread3 atm end
+     */
+
+    /*
+    ======= falsche Synch ========
+    === lockATM with concurrent access ===
+    Thread1 atm start
+    Thread2 atm start
+    Thread3 atm start
+    new ballance is: 110
+    new ballance is: 115
+    new ballance is: 110
+    Thr2: 110
+    Thr3: 115
+    Thr1: 110
+    new ballance is: 125
+    new ballance is: 121
+    new ballance is: 125
+    Thr2: 125
+    Thr3: 121
+    Thr1: 125
+    new ballance is: 95
+    Thr2: 95
+    Thread2 atm end
+    new ballance is: 95
+    new ballance is: 105
+    Thr3: 105
+    Thr1: 95
+    Thread3 atm end
+    new ballance is: 85
+    Thr3: 85
+    Thread3 atm end
+
+
+    === ohne synchr ===
+    === lockATM with concurrent access ===
+    Thread1 atm start
+    Thread2 atm start
+    Thread3 atm start
+    new ballance is: 110
+    Thr1: 110
+    new ballance is: 120
+    Thr2: 120
+    new ballance is: 135
+    Thr3: 135
+    new ballance is: 150
+    Thr1: 150
+    new ballance is: 165
+    Thr2: 165
+    new ballance is: 176
+    Thr3: 176
+    new ballance is: 146
+    Thr1: 146
+    Thread3 atm end
+    new ballance is: 116
+    Thr2: 116
+    Thread2 atm end
+    new ballance is: 96
+    Thr3: 96
+    new ballance is: 76
+    Thr3: 76
+    Thread3 atm end
+     */
+    @Test
+    void test_mySyncThreads() throws InterruptedException {
+        MeinSynchronizedThread thread1 = new MeinSynchronizedThread("thread1", new MeinObject());
+        MeinSynchronizedThread thread2 = new MeinSynchronizedThread("thread2", new MeinObject());
+        thread1.start();
+        thread2.start();
+        thread1.join();
+
+        System.out.println("=== now try with same obj ===");
+        MeinObject mySingleObj = new MeinObject();
+        MeinSynchronizedThread thread3 = new MeinSynchronizedThread("thread1", mySingleObj);
+        MeinSynchronizedThread thread4 = new MeinSynchronizedThread("thread2", mySingleObj);
+        thread3.start();
+        thread4.start();
+        thread4.join();
+
+        System.out.println("=== now try with static sync ===");
+        MeinStaticSynchThread thread5 = new MeinStaticSynchThread("thread5");
+        MeinStaticSynchThread thread6 = new MeinStaticSynchThread("thread6");
+        thread5.start();
+        thread6.start();
+        thread6.join();
+
+
+        System.out.println("=== lockATM with concurrent access ===");
+        LockATM atm = new LockATM();
+        Thread atmThr1 = new Thread(() -> {
+            System.out.println("Thread1 atm start");
+            System.out.println("Thr1: " + atm.deposit(10));
+            System.out.println("Thr1: " +atm.deposit(15));
+            System.out.println("Thr1: " +atm.withdraw(30));
+            System.out.println("Thread3 atm end");
+        });
+        Thread atmThr2 = new Thread(() -> {
+            System.out.println("Thread2 atm start");
+            System.out.println("Thr2: " +atm.deposit(10));
+            System.out.println("Thr2: " + atm.deposit(15));
+            System.out.println("Thr2: " +atm.withdraw(30));
+            System.out.println("Thread2 atm end");
+        });
+        Thread atmThr3 = new Thread(() -> {
+            System.out.println("Thread3 atm start");
+            System.out.println("Thr3: " +atm.deposit(15));
+            System.out.println("Thr3: " + atm.deposit(11));
+            System.out.println("Thr3: " + atm.withdraw(20));
+            System.out.println("Thr3: " +atm.withdraw(20));
+            System.out.println("Thread3 atm end");
+        });
+        atmThr1.start();
+        atmThr2.start();
+        atmThr3.start();
+        atmThr3.join();
+        atmThr2.join();
+        atmThr1.join();
+    }
+
+    /*
+    ==== with notify() ====
+    t2 joined waiterMethod
+    t1 joined notifierMethod (t1 hat t2 befreit)
+    t1 left notifierMethod
+    t1 joined waiterMethod
+    t3 joined waiterMethod
+    t2 left waiterMethod
+    t2 joined notifierMethod
+    t2 left notifierMethod (t2 hat t1 befreit, t3 vergammelt für immer im lock modus)
+    t2 did related work
+    t1 left waiterMethod
+    t1 did related work
+
+    ==== with notifyAll() ====
+    t2 joined waiterMethod
+    t3 joined waiterMethod
+    t1 joined notifierMethod
+    t1 left notifierMethod (hat alle befreit)
+    t1 joined waiterMethod
+    t2 left waiterMethod
+    t2 joined notifierMethod
+    t2 left notifierMethod
+    t3 left waiterMethod
+    t3 joined notifierMethod
+    t3 left notifierMethod
+    t3 did related work
+    t2 did related work
+    t1 left waiterMethod
+    t1 did related work
+     */
+    @Test
+    void test_waitAndNotify() throws InterruptedException {
+        MyThing lockObject = new MyThing();
+
+        Thread t1 = new Thread(() -> {
+            try {
+                lockObject.notifierMethod("t1");
+                lockObject.waiterMethod("t1");
+                lockObject.relatedMethod("t1");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            try {
+                lockObject.waiterMethod("t2");
+                lockObject.notifierMethod("t2");
+                lockObject.relatedMethod("t2");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Thread t3 = new Thread(() -> {
+            try {
+                lockObject.waiterMethod("t3");
+                lockObject.notifierMethod("t3");
+                lockObject.relatedMethod("t3");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        t2.start();
+        t1.start();
+        t3.start();
+        t1.join();
+        t3.join();
+    }
+
+    @Test
+    void test_producer_consumer() {
+        Producer producer = new Producer();
+        Consumer consumer = new Consumer(producer);
+
+        Thread p1 = new Thread(producer);
+        Thread p2 = new Thread(producer);
+        Thread p3 = new Thread(producer);
+        Thread c1 = new Thread(consumer);
+        p1.start();
+        p2.start();
+        p3.start();
+        c1.start();
+        try {
+            c1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void test_readWriterLockDemo() throws InterruptedException {
+        ReadWriterDemoWithWaitingTime demo = new ReadWriterDemoWithWaitingTime();
+        demo.doStuff();
+        Thread.sleep(5000);
+        demo.setDone(true);
+    }
+
+    @Test
+    void test_readWriterLockWithoutWaiting() throws InterruptedException {
+        ReadWriterDemoWithoutWaitingTime demo = new ReadWriterDemoWithoutWaitingTime();
+        demo.doStruff();
+        Thread.sleep(5000);
+        demo.setDone(true);
+    }
+
+    @Test
+    void test_aufgabe951() {
+        Tasks threadingTasks = new Tasks();
+        threadingTasks.aufgabe951();
+    }
+
+    @Test
+    void test_aufgabe952() {
+        Tasks threadingTasks = new Tasks();
+        threadingTasks.main(null);
+    }
+
+    @Test
+    void test_aufgabe954() {
+        Tasks threadingTasks = new Tasks();
+        threadingTasks.aufgabe954();
+    }
+
+    /* === richtig ===
+    neuer Betrag für t1 = 110 einzahlen: 10
+    neuer Betrag für t3 = 121 einzahlen: 11
+    neuer Betrag für t2 = 126 einzahlen: 5
+    neuer Betrag für t3 = 148 einzahlen: 22
+    neuer Betrag für t1 = 168 einzahlen: 20
+    neuer Betrag für t3 = 176 einzahlen: 8
+    neuer Betrag für t2 = 191 einzahlen: 15
+    neuer Betrag für t2 = 201 einzahlen: 10
+    Endbetrag: 201 Anz an Additionen: 8
+
+
+     === falsch ===
+     neuer Betrag für t1 = 110 einzahlen: 10
+    neuer Betrag für t2 = 105 einzahlen: 5
+    neuer Betrag für t3 = 111 einzahlen: 11
+    neuer Betrag für t2 = 126 einzahlen: 15
+    neuer Betrag für t3 = 133 einzahlen: 22
+    neuer Betrag für t1 = 131 einzahlen: 20
+    neuer Betrag für t2 = 141 einzahlen: 10
+    neuer Betrag für t3 = 139 einzahlen: 8
+    Endbetrag: 141 Anz an Additionen: 8
+     */
+    @Test
+    void test_aufgabe955() {
+        Tasks threadingTasks = new Tasks();
+        try {
+            threadingTasks.aufgabe955();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void test_challenge153() {
+        Challenges challenge = new Challenges();
+        challenge.challenge153();
     }
 }
