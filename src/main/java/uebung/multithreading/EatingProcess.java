@@ -20,7 +20,7 @@ public class EatingProcess implements Runnable {
 
     @Override
     public void run() {
-        Chopstick stick1 = null, stick2 = null;
+        String stick1 = null, stick2 = null;
         try {
             System.out.println(this.name + " setzt sich an Tisch");
             Thread.sleep(200);

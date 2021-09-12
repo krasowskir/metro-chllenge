@@ -3,29 +3,29 @@ package uebung.multithreading;
 import java.util.Stack;
 
 public class TableManager {
-    private Stack<Chopstick> chopsticks = new Stack<>();
+    private Stack<String> chopsticks = new Stack<>();
 
     public TableManager() {
         for ( int i = 0; i< 5; i++){
-            this.chopsticks.push(new Chopstick());
+            this.chopsticks.push("Besteck");
         }
     }
 
-    public synchronized Chopstick tryToAcquireLeft() throws InterruptedException {
+    public synchronized String tryToAcquireLeft() throws InterruptedException {
         while (this.chopsticks.size() <= 1){
             wait();
         }
         return chopsticks.pop();
     }
 
-    public synchronized Chopstick tryToAcquireRight() throws InterruptedException {
+    public synchronized String tryToAcquireRight() throws InterruptedException {
         while (this.chopsticks.size() == 0){
             wait();
         }
         return chopsticks.pop();
     }
 
-    public synchronized void giveBackChopstick(Chopstick giveBack){
+    public synchronized void giveBackChopstick(String giveBack){
         this.chopsticks.push(giveBack);
         notify();
     }
