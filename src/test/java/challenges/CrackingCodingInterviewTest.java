@@ -1,7 +1,7 @@
 package challenges;
 
 import org.junit.jupiter.api.Test;
-import uebung.multithreading.Challenges;
+import uebung.multithreading.challenges.Challenges;
 import uebung.multithreading.aufgaben.Tasks;
 import uebung.multithreading.firstSteps.MeinStoppableThread;
 import uebung.multithreading.firstSteps.MeinThread;
@@ -1115,5 +1115,11 @@ class CrackingCodingInterviewTest {
     void test_challenge153() {
         Challenges challenge = new Challenges();
         challenge.challenge153();
+    }
+
+    @Test
+    void test_challenge155() {
+        Challenges challenge = new Challenges();
+        challenge.challenge155();
     }
 }

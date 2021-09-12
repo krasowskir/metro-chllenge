@@ -1,4 +1,4 @@
-package uebung.multithreading;
+package uebung.multithreading.challenges;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -64,5 +64,37 @@ public class Challenges {
             e.printStackTrace();
         }
 
+    }
+
+    /*
+    Call In Order: Suppose we have the following code:
+    public class Foo {
+        public Foo() { ... }
+        public void first() { ... }
+        public void second() { ... }
+        public void third() { ... }
+    }
+    The same instance of Foo will be passed to three different threads.
+    ThreadA will call first, threadB will call second, and threadC will call third.
+    Design a mechanism to ensure that first is called before second and second is called before third.
+
+     */
+    public void challenge155(){
+        Foo foo = new Foo();
+        Thread t1 = new Thread(new FooRunnable(foo, 0));
+        t1.start();
+
+        Thread t2 = new Thread(new FooRunnable(foo, 1));
+        t2.start();
+
+        Thread t3 = new Thread(new FooRunnable(foo, 2));
+        t3.start();
+        try {
+            t1.join();
+            t2.join();
+            t3.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

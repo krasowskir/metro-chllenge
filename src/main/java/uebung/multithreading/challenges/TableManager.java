@@ -1,4 +1,4 @@
-package uebung.multithreading;
+package uebung.multithreading.challenges;
 
 import java.util.Stack;
 
