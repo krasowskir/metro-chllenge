@@ -1,13 +1,8 @@
 package companies.olx;
 
-import com.example.olxchallenge.model.Car;
-import com.example.olxchallenge.model.CarModel;
-import com.example.olxchallenge.model.Defect;
-import com.example.olxchallenge.service.DefectService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /*
