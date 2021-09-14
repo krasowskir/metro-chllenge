@@ -1,4 +1,4 @@
-package uebung;
+package uebung.structures;
 
 import java.util.*;
 import java.util.function.UnaryOperator;

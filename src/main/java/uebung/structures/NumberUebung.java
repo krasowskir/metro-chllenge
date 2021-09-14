@@ -1,12 +1,12 @@
-package uebung;
+package uebung.structures;
 
-import javax.swing.plaf.synth.SynthDesktopIconUI;
-import java.text.ChoiceFormat;
+import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.BitSet;
+import java.util.Locale;
 import java.util.stream.IntStream;
 
 public class NumberUebung {
+    public static final Double data[] = {0d, 1d, 22d/7, 100.2345678, 2034588.12345};
 
     public void testBignumbers(){
 //        BitSet fromNumber = BitSet.valueOf("01101".getBytes());
@@ -86,4 +86,110 @@ public class NumberUebung {
         System.out.println("Erg: " + sumResult);
         System.out.println("Zeit: " + String.valueOf((toTime - fromTime) /1000000) +" ms");
     }
+
+    public void testNumbers() {
+        float a = 0.3f;
+        System.out.println("multiply with 3: " + a * 3);
+        System.out.println("divide by 3: " + a / 3);
+        System.out.println("again multiply with 3: " + (a / 3) * 9);
+    }
+
+    public void testIfValidNumber() {
+        String[] toTestNumbrs = {"3000", "20L"};
+
+
+        for (String elem : toTestNumbrs) {
+            try {
+                Double.parseDouble(elem);
+                System.out.println(String.format("%s is a valid number!", elem));
+            } catch (NumberFormatException nfe) {
+                System.out.println(String.format("%s is not a valid number!", elem));
+            }
+        }
+    }
+
+    public void testStoreLargerNumberInSmaller() {
+        String[] toTestNumbrs = {"30000000000000.50000000", "200000.2000"};
+
+
+        for (String elem : toTestNumbrs) {
+
+            double largeNum = Double.parseDouble(elem);
+            largeNum = largeNum * largeNum;
+            float smallNum = (float) largeNum;
+            System.out.println(String.format("%f is small Num", smallNum));
+            System.out.println(String.format("%f is small Num", largeNum));
+        }
+    }
+
+    public void testAutoboxing(){
+        int basicNumb = 42;
+        Integer intObj = Integer.valueOf(42);
+        System.out.println("numbr basic: " + basicNumb + " instanceOf: " + basicNumb );
+        System.out.println("numbr boxed: " + intObj + " instanceOf: " + intObj.getClass() );
+    }
+
+    public void testFraction(){
+        double result = 2/3 * 5;
+        System.out.println("2/3 * 5 = " + result);
+
+        double result2 = 2d/3d * 5;
+        System.out.println("2d/3d * 5 = " + result2);
+
+        double result3 = 5/3 * 2;
+        System.out.println(" 5/3 * 2 = " + result3);
+
+        double result4 = 5d/3 * 2;
+        System.out.println(" 5/3d * 2 = " + result4);
+    }
+
+    public void testForInfinity(){
+        double e1 = 123;
+        double e2 = 0;
+
+        int a = 42;
+
+        System.out.println("e1/e2 is infinite ? ==> " + Double.isInfinite(e1/e2));
+        System.out.println("e1/e2 is Nan ? ==> " + Double.isNaN(e1/e2));
+        System.out.println("a/e2 is infinite ? ==> " + Double.isInfinite(a/e2));
+        System.out.println("1 / 0 infinity? ==> " + ((1/0d) == Double.POSITIVE_INFINITY));
+    }
+
+    public void testForEquality(){
+        double da = 3.0d * 0.33333333333;
+        double db = 0.99999999999;
+
+
+        final double EPSILON = 0.0001d;
+        System.out.println("da == db ? -> " + (da == db));
+        System.out.println("da same db with EPSILON ? -> " + (Math.abs(da - db) < EPSILON));
+
+        double dc = Double.NaN;
+        double dd = Double.NaN;
+        System.out.println("dc == dd ? -> " + (dc == dd));
+
+    }
+
+    public void testRound(){
+        double a = 3.64999d;
+        double b = 0.34999d;
+
+        System.out.println("rounding a = " + Math.round(a));
+        System.out.println("rounding b = " + Math.round(b));
+    }
+
+    public void testNumberFormating(){
+        NumberFormat instance = NumberFormat.getInstance(Locale.GERMAN);
+        instance.setMinimumIntegerDigits(1);
+//        instance.setMaximumIntegerDigits(3);
+        instance.setMinimumFractionDigits(2);
+        instance.setMaximumFractionDigits(3);
+
+        for (double elem : data){
+            System.out.println("elem: " + elem + " format-> " + instance.format(elem));
+        }
+
+    }
 }
+
+

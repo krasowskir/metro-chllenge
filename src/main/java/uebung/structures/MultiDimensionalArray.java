@@ -1,4 +1,4 @@
-package uebung;
+package uebung.structures;
 
 public class MultiDimensionalArray {
 

@@ -1,4 +1,6 @@
-package uebung;
+package uebung.streams;
+
+import uebung.Player;
 
 import java.util.*;
 import java.util.function.*;

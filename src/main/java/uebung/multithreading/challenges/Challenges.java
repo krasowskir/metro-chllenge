@@ -82,10 +82,10 @@ public class Challenges {
     public void challenge155(){
         Foo foo = new Foo();
         Thread t1 = new Thread(new FooRunnable(foo, 0));
-        t1.start();
 
         Thread t2 = new Thread(new FooRunnable(foo, 1));
         t2.start();
+        t1.start();
 
         Thread t3 = new Thread(new FooRunnable(foo, 2));
         t3.start();
