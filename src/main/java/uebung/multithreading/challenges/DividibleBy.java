@@ -2,5 +2,5 @@ package uebung.multithreading.challenges;
 
 public interface DividibleBy {
 
-    public String handleNumber(int number);
+    public void handleNumber(FizzBuzzManager.Result result);
 }

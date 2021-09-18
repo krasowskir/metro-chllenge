@@ -33,12 +33,13 @@ public class Divider implements DividibleBy, Runnable {
     }
 
     @Override
-    public String handleNumber(int number) {
-//        System.out.println("numb: " + number);
-        String value = number % DIVIDING_FACTOR == 0 ? this.call : "";
-        if (!"".equals(value)) {
-            System.out.println("number: " + number + " " + value);
+    public void handleNumber(FizzBuzzManager.Result result) {
+        if (!result.isProcessed()){
+            int number = result.getNumber();
+            if (number % DIVIDING_FACTOR == 0){
+                fizzBuzzManager.setProcessed(true);
+                System.out.println("number: " + number + " " + call);
+            }
         }
-        return value;
     }
 }

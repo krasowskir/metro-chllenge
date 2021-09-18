@@ -145,34 +145,26 @@ public class Challenges {
      */
     public void challenge157() {
 
-        //producer erzeugen
+        //producer erzeugen und starten
         FizzBuzzManager fizzBuzzManager = new FizzBuzzManager();
-        Thread t = new Thread(fizzBuzzManager);
-        t.start();
+        new Thread(fizzBuzzManager).start();
 
-        // 3 threads consumer erzeugen
+
+        // 3 threads consumer erzeugen und starten
         Divider fizz, buzz;
         SpecialDivider fizzBuzz;
+
+        fizzBuzz = new SpecialDivider(fizzBuzzManager);
         fizz = new Divider(3, fizzBuzzManager);
         buzz = new Divider(5, fizzBuzzManager);
-        fizzBuzz = new SpecialDivider(fizzBuzzManager);
 
-        Thread t1 = new Thread(fizz);
-        Thread t2 = new Thread((Runnable) buzz);
-        new Thread((Runnable) fizzBuzz).start();
-        t1.start();
-        t2.start();
-        try {
-            t1.join();
-            t2.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        new Thread(fizz).start();
+        new Thread(buzz).start();
+        new Thread(fizzBuzz).start();
 
         try {
-            Thread.sleep(10000);
+            Thread.sleep(20000);
             fizzBuzzManager.setReady(true);
-            Thread.sleep(5000);
             fizz.setDone(true);
             buzz.setDone(true);
         } catch (InterruptedException e) {

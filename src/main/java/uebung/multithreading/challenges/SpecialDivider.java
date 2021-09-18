@@ -1,7 +1,5 @@
 package uebung.multithreading.challenges;
 
-import java.util.Stack;
-
 public class SpecialDivider implements DividibleBy, Runnable{
 
     private final int DIVIDING_FACTOR1 = 5;
@@ -18,12 +16,19 @@ public class SpecialDivider implements DividibleBy, Runnable{
     }
 
     @Override
-    public String handleNumber(int number) {
-        String value = (number % DIVIDING_FACTOR1 == 0 && number % DIVIDING_FACTOR2 == 0 ) ? "FizzBuzz" : "";
-        if (!"".equals(value)){
-            System.out.println("number: " + number + " " + value);
+    public void handleNumber(FizzBuzzManager.Result result) {
+//        if (!result.isProcessed()){
+//            int number = result.getNumber();
+//            if (number % DIVIDING_FACTOR1 == 0 && number % DIVIDING_FACTOR2 == 0){
+//                fizzBuzzManager.setProcessed(true);
+//                System.out.println("number: " + number + " " + "FizzBuzz");
+//            }
+//        }
+        int number = result.getNumber();
+        if (number % DIVIDING_FACTOR1 == 0 && number % DIVIDING_FACTOR2 == 0){
+            fizzBuzzManager.setProcessed(true);
+            System.out.println("number: " + number + " " + "FizzBuzz");
         }
-        return value;
     }
 
     @Override
