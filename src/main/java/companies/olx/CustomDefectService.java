@@ -1,5 +1,8 @@
 package companies.olx;
 
+import companies.olx.model.CarModel;
+import companies.olx.model.Defect;
+import companies.olx.service.DefectService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,30 +31,30 @@ Tasks
  */
 public class CustomDefectService  {
 
-    private DefectService defectService;
-
-    public CustomDefectService(DefectService service) {
-        this.defectService = service;
-    }
-
-
-    public List<Defect> locateDefectsInCars(List<Car> cars) {
-        List<CarModel> models = cars.stream()
-                .map(Car::getCarModel)
-                .collect(Collectors.toList());
-
-        List<Defect> foundDefects = defectService.locateDefectsInCars(models);
-
-        List<Defect> filteredOutListOfDefects = new ArrayList<>();
-
-        for (Car car : cars){
-                    filteredOutListOfDefects.addAll(foundDefects.stream()
-                    .filter(d -> d.getAffectedYearsOfIssue().contains(car.getManufacturingYear()))
-                    .filter(d -> d.getCarModel().getBrand() == car.getCarModel().getBrand())
-                    .collect(Collectors.toSet()));
-        }
-        return filteredOutListOfDefects;
-    }
+//    private DefectService defectService;
+//
+//    public CustomDefectService(DefectService service) {
+//        this.defectService = service;
+//    }
+//
+//
+//    public List<Defect> locateDefectsInCars(List<Car> cars) {
+//        List<CarModel> models = cars.stream()
+//                .map(Car::getCarModel)
+//                .collect(Collectors.toList());
+//
+//        List<Defect> foundDefects = defectService.locateDefectsInCars(models);
+//
+//        List<Defect> filteredOutListOfDefects = new ArrayList<>();
+//
+//        for (Car car : cars){
+//                    filteredOutListOfDefects.addAll(foundDefects.stream()
+//                    .filter(d -> d.getAffectedYearsOfIssue().contains(car.getManufacturingYear()))
+//                    .filter(d -> d.getCarModel().getBrand() == car.getCarModel().getBrand())
+//                    .collect(Collectors.toSet()));
+//        }
+//        return filteredOutListOfDefects;
+//    }
 
 
 }

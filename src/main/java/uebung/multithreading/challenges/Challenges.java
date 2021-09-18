@@ -97,4 +97,66 @@ public class Challenges {
             e.printStackTrace();
         }
     }
+
+    /*
+    Synchronized Methods: You are given a class with synchronized method A and a normal method B.
+    If you have two threads in one instance of a program, can they both execute A at the same time?
+    Can they execute A and B at the same time?
+     */
+    public void challenge156(){
+        SynchronizedClass synchronizedClass = new SynchronizedClass();
+
+        SynchronizedRunnable run1 = new SynchronizedRunnable(synchronizedClass, 5);
+//        SynchronizedRunnable run2 = new SynchronizedRunnable(synchronizedClass,7);
+        SynchrBRunnable run3 = new SynchrBRunnable(synchronizedClass, 3);
+
+        Thread t1 = new Thread(run1);
+//        Thread t2 = new Thread(run2);
+        Thread t3 = new Thread(run3);
+
+        t1.start();
+        t3.start();
+
+        try {
+            Thread.sleep(7000);
+            run3.setDone(true);
+            run1.setDone(true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            t1.join();
+            t3.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+    FizzBuzz: In the classic problem FizzBuzz, you are told to print the numbers from 1 to n.
+    However, when the number is divisible by 3, print"Fizz''. When it is divisible by 5, print"Buzz''.
+    When it is divis­ ible by 3 and 5, print "FizzBuzz''.
+    In this problem, you are asked to do this in a multithreaded way.
+    Implement a multithreaded version of FizzBuzz with four threads.
+    One thread checks for divisibility of 3 and prints "Fizz''.
+    Another thread is responsible for divisibility of 5 and prints"Buzz''.
+    A third thread is responsible for divisibility of 3 and 5 and prints"FizzBuzz''.
+    A fourth thread does the numbers.
+     */
+    public void challenge157(){
+        FizzBuzzManager fizzBuzzManager = new FizzBuzzManager();
+        Thread t = new Thread(fizzBuzzManager);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            Thread.sleep(10000);
+            fizzBuzzManager.setReady(true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

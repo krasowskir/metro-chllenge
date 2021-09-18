@@ -1,5 +1,7 @@
 package uebung.streams;
 
+import uebung.Player;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -7,10 +9,10 @@ import java.util.stream.Stream;
 
 public class FunctionalUebung {
     public Collection<Player> players = Arrays.asList(
-            new Player("richard",new String[]{"Altenberg", "Bonn", "Berlin"}, 30),
-            new Player("lidia",new String[]{"Altenberg", "Pirna", "Dublin", "Berlin"}, 33),
-            new Player("waldemar",new String[]{"Altenberg", "Dresden"}, 28),
-            new Player("Iwan",new String[]{"Daugavpils","Altenberg", "Pirna", "Berlin"}, 78));
+            new Player("richard",30,new String[]{"Altenberg", "Bonn", "Berlin"}, "Daugavpils"),
+            new Player("lidia",33, new String[]{"Altenberg", "Pirna", "Dublin", "Berlin"}, "Daugavpils"),
+            new Player("waldemar",28, new String[]{"Altenberg", "Dresden"}, "Daugavpils"),
+            new Player("Iwan",78, new String[]{"Daugavpils","Altenberg", "Pirna", "Berlin"},  "Daugavpils"));
 
     public Set<String> findLongNames(List<Player> players) {
         Set<String> playerNames = new HashSet<>();
@@ -53,7 +55,7 @@ public class FunctionalUebung {
                 .ifPresentOrElse(
                         elem -> { System.out.println("player: " + elem.getName() + " alter: " + elem.getAlter());},
                         () -> {
-                            Player tmp = new Player("not found",new String[]{}, 0);
+                            Player tmp = new Player("not found",0,new String[]{}, "nowhere");
                             System.out.println("player: " + tmp.getName() + " alter: " + tmp.getAlter());
                         }
                 );

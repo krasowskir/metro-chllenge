@@ -1,7 +1,6 @@
 package companies.olx;
 
 
-import companies.olx.model.Car;
 import companies.olx.model.Defect;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,9 +16,9 @@ public class DemoApplication {
 
 	}
 
-	public List<Defect> locateDefectsInCars(List<Car> cars){
-		//remote call
-		return new ArrayList<>();
-	}
+//	public List<Defect> locateDefectsInCars(List<Car> cars){
+//		//remote call
+//		return new ArrayList<>();
+//	}
 
 }

@@ -1,11 +1,5 @@
 package companies.olx.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-
-@Getter
 public class CarModel {
 
     private Brand brand;
@@ -16,12 +10,33 @@ public class CarModel {
         this.version = 1;
     }
 
-    public void setBrand(Brand brand) {
+//    public void setBrand(Brand brand) {
+//        this.brand = brand;
+//    }
+
+
+    public void setBrand(companies.olx.model.Brand brand) {
         this.brand = brand;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public void setModelName(String modelName) {
         this.modelName = modelName;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     @Override

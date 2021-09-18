@@ -1122,4 +1122,44 @@ class CrackingCodingInterviewTest {
         Challenges challenge = new Challenges();
         challenge.challenge155();
     }
+
+    /*
+    === methodA korrekt ===
+    value: 5
+    value: 12
+    value: 17
+    value: 24
+    value: 29
+
+    === methodB gleichzeitig ===
+    value: 12
+    value: 12
+    value: 19
+    value: 19
+    value: 31
+    value: 31
+    value: 43
+    value: 43
+
+    === methodB & methodA ===
+    value A: 5
+    value B: 3
+    value A: 10
+    value B: 6
+    value A: 15
+    value B: 9
+    value A: 20
+    value B: 12
+     */
+    @Test
+    void test_challenge156() {
+        Challenges challenge = new Challenges();
+        challenge.challenge156();
+    }
+
+    @Test
+    void test_challenge157() {
+        Challenges challenge = new Challenges();
+        challenge.challenge157();
+    }
 }
