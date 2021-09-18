@@ -143,18 +143,38 @@ public class Challenges {
     A third thread is responsible for divisibility of 3 and 5 and prints"FizzBuzz''.
     A fourth thread does the numbers.
      */
-    public void challenge157(){
+    public void challenge157() {
+
+        //producer erzeugen
         FizzBuzzManager fizzBuzzManager = new FizzBuzzManager();
         Thread t = new Thread(fizzBuzzManager);
         t.start();
+
+        // 3 threads consumer erzeugen
+        Divider fizz, buzz;
+        SpecialDivider fizzBuzz;
+        fizz = new Divider(3, fizzBuzzManager);
+        buzz = new Divider(5, fizzBuzzManager);
+        fizzBuzz = new SpecialDivider(fizzBuzzManager);
+
+        Thread t1 = new Thread(fizz);
+        Thread t2 = new Thread((Runnable) buzz);
+        new Thread((Runnable) fizzBuzz).start();
+        t1.start();
+        t2.start();
         try {
-            t.join();
+            t1.join();
+            t2.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         try {
             Thread.sleep(10000);
             fizzBuzzManager.setReady(true);
+            Thread.sleep(5000);
+            fizz.setDone(true);
+            buzz.setDone(true);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
