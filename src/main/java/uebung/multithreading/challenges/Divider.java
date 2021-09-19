@@ -26,8 +26,8 @@ public class Divider implements DividibleBy, Runnable {
     public void run() {
         while (!isDone) {
             if (manager.isProcessed()) {
-                if (!source.isEmpty()) {
-                    synchronized (source) {
+                synchronized (source) {
+                     if (!source.isEmpty()) {
                         this.handleNumber();
                     }
                 }

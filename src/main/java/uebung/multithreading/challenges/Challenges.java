@@ -143,6 +143,56 @@ public class Challenges {
     A third thread is responsible for divisibility of 3 and 5 and prints"FizzBuzz''.
     A fourth thread does the numbers.
      */
+
+    /* Number: 30 FizzBuzz
+    Number: 45 FizzBuzz
+    Number: 53
+    Number: 57 FIZZ
+    Number: 96 FIZZ
+    Number: 34
+    Number: 79
+    Number: 53
+    Number: 53
+    Number: 91
+    Number: 65 BUZZ
+    Number: 44
+    Number: 35 BUZZ
+    Number: 0 FizzBuzz
+    Number: 60 BUZZ
+    Number: 45 FizzBuzz
+    Number: 80 BUZZ
+    Number: 87 FIZZ
+    Number: 38
+    Number: 19
+    Number: 1
+    Number: 52
+    Number: 27 FIZZ
+    Number: 35 BUZZ
+    Number: 82
+    Number: 20 BUZZ
+    Number: 77
+    Number: 41
+    Number: 89
+    Number: 10 BUZZ
+    Number: 53
+    Number: 16
+    Number: 8
+    Number: 31
+    Number: 53
+    Number: 74
+    Number: 77
+    Number: 22
+    Number: 19
+    Number: 43
+    Number: 37
+    Number: 39 FIZZ
+    Number: 0 FizzBuzz
+    Number: 95 BUZZ
+    Number: 68
+    Number: 77
+    Number: 6 FIZZ
+    Number: 60 FIZZ
+    Number: 61 */
     public void challenge157() {
 
         //producer erzeugen und starten

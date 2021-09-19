@@ -31,17 +31,18 @@ public class SpecialDivider implements DividibleBy, Runnable {
     @Override
     public void run() {
         while (!isDone) {
-            if (!source.isEmpty()) {
-                synchronized (source) {
+            synchronized (source) {
+                if (!source.isEmpty()) {
                     this.handleNumber();
                 }
-                manager.setProcessed(true);
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
+            manager.setProcessed(true);
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }
