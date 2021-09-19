@@ -164,7 +164,8 @@ public class Challenges {
 
         try {
             Thread.sleep(20000);
-            fizzBuzzManager.setReady(true);
+            fizzBuzzManager.setDone(true);
+            fizzBuzz.setDone(true);
             fizz.setDone(true);
             buzz.setDone(true);
         } catch (InterruptedException e) {
