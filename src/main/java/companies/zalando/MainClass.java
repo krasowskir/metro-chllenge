@@ -86,53 +86,7 @@ public class MainClass {
 //        NumberUebung numberUebung = new NumberUebung();
 //        numberUebung.testIfValidNumber();
 //        numberUebung.testNumberFormating();
-//        FunctionalUebung uebung = new FunctionalUebung();
-//          System.out.println("test normal: " + uebung.test1());
-//          System.out.println("test func: " + uebung.testFunc());
-//          uebung.findWho(33);
-//          System.out.println("players: " + uebung.findAllThat(player -> player.getAlter() > 27));
-//
-//          System.out.println("convert player Names: " + uebung.converNames(player -> { player.setName(player.getName().toUpperCase()); return player; }));
-//
-//          System.out.println("concatenate players with flatMap: " + uebung.concatenatePlayers(player -> { player.setAlter(player.getAlter() * 2); return Stream.of(player, player); }));
-//
-//          System.out.println("ältester Spieler: " + uebung.findMaxPlayer(Comparator.comparing(Player::getAlter)));
-//
-//          System.out.println("jüngste Spieler: " + uebung.findMinPlayer(Comparator.comparing(Player::getAlter)));
-//
-//          System.out.println("gesamtalter " + uebung.findGesamtAlter((x ,y ) -> x + y));
-//
-//          System.out.println("lange Namen: " + uebung.findLongNames(List.copyOf(uebung.players)));
-//
-//          System.out.println("lange Namen refactored: " + uebung.findLongNamesRefactored(List.copyOf(uebung.players)));
-//
-//          Integer[] numbers = {2, 5, 6, 15, 22, 58, 4492, 23, 354234, 12, 23, 3434};
-//          System.out.println("isOdd for number: " + Arrays.stream(numbers).filter(number ->  number % 2 == 0).collect(Collectors.toSet()));
-//
-//          System.out.println("sum numbers: " + uebung.addUp(Arrays.stream(new Integer[]{2,5,9,11,24,58,129,256})));
-//
-//          System.out.println("players in at least two locations: " + uebung.findPlayersWithTwoLocations(uebung.players.stream()));
-//
-//          System.out.println("spieler in Dresden mit mind zwei Orten" + uebung.findPlayersInDresden(uebung.players.stream()));
-//
-//          List<Integer> alterBoxed = uebung.findPlayersStatistics(uebung.players.stream()).collect(Collectors.toList());
-//
-//          System.out.println("spieler alter boxed: " + alterBoxed.toString());
-//
-//          List<Integer> unorderedAlter = uebung.players.stream().map(player -> player.getAlter()).collect(Collectors.toList());
 
-//          System.out.println("unsortierte Alter: " + unorderedAlter.toString());
-//          System.out.println("sortierte Ater: " + uebung.findOrderAlterOfPlayers(uebung.players.stream()));
-
-//            System.out.println("Durchschnittsalter: " + uebung.findAvgAge(uebung.players.stream()));
-//            System.out.println("Summe alter: " + uebung.findSumAge(uebung.players.stream()));
-
-//            System.out.println("Zusammenfassung für Alter: " + uebung.findAvgSumAndOthers(uebung.players.stream()).toString());
-//            System.out.println("jüngere Spieler: " + uebung.determineYoungPlayers(uebung.players.stream()));
-//
-//            System.out.println("gruppiere Spieler: " + uebung.groupByCity(uebung.players.stream()));
-//
-//            System.out.println("gruppiere players mit downstream collectors: " + uebung.findPlayerWithLongestCity(uebung.players.stream()));
     }
 
     public String convertToBin(int fromNumber) {

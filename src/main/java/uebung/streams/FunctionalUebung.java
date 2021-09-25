@@ -7,6 +7,8 @@ import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.*;
+
 public class FunctionalUebung {
     public Collection<Player> players = Arrays.asList(
             new Player("richard",30,new String[]{"Altenberg", "Bonn", "Berlin"}, "Daugavpils"),
@@ -32,7 +34,7 @@ public class FunctionalUebung {
                 .collect(Collectors.toSet());
     }
 
-    public int test1(){
+    public int countOlder29Old(){
         int count = 0;
         Iterator<Player> playerIterator = players.iterator();
         while(playerIterator.hasNext()){
@@ -44,21 +46,14 @@ public class FunctionalUebung {
         return count;
     }
 
-    public int testFunc(){
+    public int countOlder29OldNew(){
         return (int) players.stream().filter(elem -> elem.getAlter() > 28).count();
     }
 
-    public void findWho(int alter){
-        players.stream()
+    public Optional<Player> findWho(int alter){
+        return players.stream()
                 .filter(elem -> elem.getAlter() == alter)
-                .findFirst()
-                .ifPresentOrElse(
-                        elem -> { System.out.println("player: " + elem.getName() + " alter: " + elem.getAlter());},
-                        () -> {
-                            Player tmp = new Player("not found",0,new String[]{}, "nowhere");
-                            System.out.println("player: " + tmp.getName() + " alter: " + tmp.getAlter());
-                        }
-                );
+                .findFirst();
 
     }
 
@@ -158,16 +153,23 @@ public class FunctionalUebung {
 
     public Integer findSumAge(Stream<Player> players){
         ToIntFunction<Player> alterOfPlayers = Player::getAlter;
-        players.mapToInt(Player::getAlter).sum();
-
-        return players.collect(Collectors.summingInt(alterOfPlayers));
+//        players.mapToInt(Player::getAlter).sum();
+        return players.collect(summingInt(alterOfPlayers));
     }
 
     public IntSummaryStatistics findAvgSumAndOthers(Stream<Player> players){
         return players.collect(Collectors.summarizingInt(Player::getAlter));
     }
 
-    public Map<Boolean, List<Player>> determineYoungPlayers(Stream<Player> players){
+    public Map<String, Integer> findPlayerWithMostCity(Stream<Player> players){
+        ToIntFunction<Player> toCities = player -> player.getOrte().length;
+        return players
+                .collect(Collectors.groupingBy(Player::getName,
+                        mapping(p -> p, summingInt(toCities))));
+    }
+
+    //Unterschied zur groupBy ist, dass man es hier in zwei Gruppen einteilt, mit bool Wert (Schlüssel)
+    public Map<Boolean, List<Player>> partitionByYoungPlayers(Stream<Player> players){
         Predicate<Player> isYoung = player -> player.getAlter() < 30;
         return players.collect(Collectors.partitioningBy(isYoung));
     }
@@ -177,11 +179,20 @@ public class FunctionalUebung {
         return players.collect(Collectors.groupingBy(gruppiereNachCities));
     }
 
-    public Map<String, Integer> findPlayerWithLongestCity(Stream<Player> players){
-//        Function<Player, String[]> toCities = player -> player.getOrte();
-        ToIntFunction<Player> toCities = player -> player.getOrte().length;
-        return players
-                .collect(Collectors.groupingBy(Player::getName,
-                        Collectors.mapping(p -> p, Collectors.summingInt(toCities))));
+    public Map<Boolean, List<Player>> partitionPLayersWithTwoCities(Stream<Player> players) {
+        Predicate<Player> hasTwoCities = player -> player.getOrte().length == 2;
+        return players.collect(Collectors.partitioningBy(hasTwoCities));
+    }
+
+    public HashMap<String, Integer> groupPLayersWithAmountOfCities(Stream<Player> players) {
+        ToIntFunction<Player> byAmountOfCities = player -> player.getOrte().length;
+
+         return players.collect(
+                 Collectors.groupingBy(player -> player.getName(), HashMap::new, summingInt(byAmountOfCities))); //averageInt(...)
+    }
+
+    public HashMap<String, Integer> groupPlayersNameAndByCity(Stream<Player> playerS){
+//        return playerS.collect(toMap(player -> player.getName(), player -> player.getOrte().length));
+        return playerS.collect(toMap(Player::getName, player -> player.getOrte().length, (a, b) -> a+b, HashMap::new));
     }
 }
