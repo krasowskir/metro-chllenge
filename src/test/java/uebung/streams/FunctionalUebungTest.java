@@ -156,9 +156,9 @@ class FunctionalUebungTest {
         Player{name='waldemar', alter=28, orte=[Altenberg, Dresden], birthPlace='Daugavpils'}
     ]*/
     @Test
-    void testGroupByCity_groupBy() {
+    void testGroupByFirstCity_groupBy() {
         FunctionalUebung uebung = new FunctionalUebung();
-        Map<String, List<Player>> playersByCity = uebung.groupByCity(uebung.players.stream());
+        Map<String, List<Player>> playersByCity = uebung.groupByFirstCity(uebung.players.stream());
         playersByCity.entrySet().forEach(System.out::println);
     }
 
@@ -212,5 +212,14 @@ class FunctionalUebungTest {
         FunctionalUebung uebung = new FunctionalUebung();
         Map<String, Integer> playersWithTwoCities = uebung.groupPlayersNameAndByCity(uebung.players.stream());
         playersWithTwoCities.entrySet().forEach(System.out::println);
+    }
+
+    /*
+    Daugavpils players: [richard, lidia, waldemar, Iwan]
+     */
+    @Test
+    void test_groupByCity() {
+        FunctionalUebung uebung = new FunctionalUebung();
+        uebung.groupByCity(uebung.players.stream()).forEach((city, players) -> System.out.println(city + " players: " + players.toString()));
     }
 }
