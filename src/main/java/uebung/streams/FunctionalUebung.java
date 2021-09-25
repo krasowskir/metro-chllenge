@@ -174,7 +174,7 @@ public class FunctionalUebung {
         return players.collect(Collectors.partitioningBy(isYoung));
     }
 
-    public Map<String, List<Player>> groupByCity(Stream<Player> players){
+    public Map<String, List<Player>> groupByFirstCity(Stream<Player> players){
         Function<Player, String> gruppiereNachCities = player -> player.getOrte()[0];
         return players.collect(Collectors.groupingBy(gruppiereNachCities));
     }
@@ -194,5 +194,9 @@ public class FunctionalUebung {
     public HashMap<String, Integer> groupPlayersNameAndByCity(Stream<Player> playerS){
 //        return playerS.collect(toMap(player -> player.getName(), player -> player.getOrte().length));
         return playerS.collect(toMap(Player::getName, player -> player.getOrte().length, (a, b) -> a+b, HashMap::new));
+    }
+
+    public Map<String, List<String>> groupByCity(Stream<Player> playerS){
+        return playerS.collect(groupingBy(p -> p.getBirthPlace(), mapping(p -> p.getName(), toList())));
     }
 }
