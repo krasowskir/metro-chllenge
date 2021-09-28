@@ -1,8 +1,6 @@
 package uebung.multithreading.immutability;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Action {
 
@@ -60,5 +58,97 @@ public class Action {
         System.out.println("removeIf...");
         collection.removeIf(e -> "Two".equals(e));
         System.out.println("final collection: " + collection);
+    }
+
+    void navigableSetRemove(NavigableSet<Integer> set){
+        System.out.println("set: " + set);
+        try {
+            for (int i : set){
+                System.out.println(i);
+                System.out.println("calling set remove(2)...");
+                set.remove(2);
+            }
+        } catch (Exception e){
+            System.out.println(e.getClass().getName());
+        }
+        System.out.println(set);
+    }
+
+    void navigableSetIterRemove(NavigableSet<Integer> set){
+        System.out.println("set: " + set);
+        try {
+            Iterator<Integer> iter = set.iterator();
+            while (iter.hasNext()){
+                Integer elem = (Integer)iter.next();
+                System.out.println(elem);
+                if (elem == 2){
+                    System.out.println("calling remove(2)...");
+                    iter.remove();
+                }
+            }
+        } catch (Exception e){
+            System.out.println(e.getClass().getName());
+        }
+        System.out.println(set);
+    }
+
+    void navigableSetIterRemoveIf(NavigableSet<Integer> set){
+        System.out.println("set: " + set);
+        try {
+            for (int i : set){
+                System.out.println(i);
+                set.removeIf(elem -> elem == 2);
+            }
+        } catch (Exception e){
+            System.out.println(e.getClass().getName());
+        }
+        System.out.println(set);
+    }
+
+    void demoNavigableSetAdd(NavigableSet<Integer> set){
+        System.out.println("set: " + set);
+        try {
+            int m = set.stream().max(Comparator.naturalOrder()).get() +1;
+            for (int i : set){
+                System.out.println(i);
+                System.out.println("calling set.add(" + m + ")");
+                set.add(m++);
+                if (m > 6){
+                    break;
+                }
+            }
+        } catch (Exception e){
+            System.out.println(e.getClass().getName());
+        }
+        System.out.println(set);
+    }
+
+    void demoMapPut(Map<Integer, String> map){
+        System.out.println("map: " + map);
+        try {
+            Set<Integer> keys = map.keySet();
+            for (int i : keys){
+                System.out.println(i);
+                System.out.println("calling put(8)...");
+                map.put(8, "Eight");
+
+                System.out.println(i);
+                System.out.println("calling put(8)...");
+                map.put(8, "Eight");
+
+                System.out.println(i);
+                System.out.println("calling putIfAbsent(9)...");
+                map.putIfAbsent(9, "Nine");
+
+                System.out.println(i);
+                System.out.println("calling putIfAbsent(9)...");
+                map.putIfAbsent(9, "Nine");
+
+                System.out.println("size: " + map.size());
+                System.out.println("map: " + map);
+            }
+        } catch (Exception e){
+            System.out.println(e.getClass().getName());
+        }
     }
 }
