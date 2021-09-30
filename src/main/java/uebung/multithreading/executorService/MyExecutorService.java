@@ -51,27 +51,6 @@ public class MyExecutorService {
         }
     }
 
-    void shutDownAndCancelTasks(ExecutorService executorService, int shutdownDelaySec, String name, Future future) {
-        try {
-            executorService.shutdown();
-            System.out.println(String.format("Waiting %d seconds before shutdown", shutdownDelaySec));
-            executorService.awaitTermination(shutdownDelaySec, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            System.out.println("caught around executorS.awaitTermination: " + e.getClass().getName());
-        } finally {
-            if (!executorService.isTerminated()) {
-                System.out.println("terminating remaining tasks...");
-                if (future != null && !future.isDone() && !future.isCancelled()) {
-                    System.out.println("cancelling tasks...");
-                    future.cancel(true);
-                }
-            }
-            System.out.println("calling executorService.shutdown " + name);
-            List<Runnable> leftOverTasks = executorService.shutdownNow();
-            System.out.println("left tasks amount: " + leftOverTasks.size() + " Service stopped.");
-        }
-    }
-
     void executeAndSubmit(ExecutorService executorService, int shutdownDelaySec, int threadSleepSec){
         System.out.println("ShutdownDelaySec: " + shutdownDelaySec + " ThreadSleepSec: " + threadSleepSec);
         Runnable runnable1 = () -> {
@@ -94,5 +73,26 @@ public class MyExecutorService {
         };
         Future future = executorService.submit(runnable2);
         shutDownAndCancelTasks(executorService, shutdownDelaySec, "Two", future);
+    }
+
+    void shutDownAndCancelTasks(ExecutorService executorService, int shutdownDelaySec, String name, Future future) {
+        try {
+            executorService.shutdown();
+            System.out.println(String.format("Waiting %d seconds before shutdown", shutdownDelaySec));
+            executorService.awaitTermination(shutdownDelaySec, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            System.out.println("caught around executorS.awaitTermination: " + e.getClass().getName());
+        } finally {
+            if (!executorService.isTerminated()) {
+                System.out.println("terminating remaining tasks...");
+                if (future != null && !future.isDone() && !future.isCancelled()) {
+                    System.out.println("cancelling tasks...");
+                    future.cancel(true);
+                }
+            }
+            System.out.println("calling executorService.shutdown " + name);
+            List<Runnable> leftOverTasks = executorService.shutdownNow();
+            System.out.println("left tasks amount: " + leftOverTasks.size() + " Service stopped.");
+        }
     }
 }

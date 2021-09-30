@@ -12,6 +12,10 @@ public class RichThread implements Runnable{
     private volatile boolean done = false;
     private String name;
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public RichThread() {
     }
 
