@@ -18,11 +18,16 @@ public class MyServer {
     }
 
     public void runServer() {
+        ServerSocket listener = null;
+        Socket client = null;
+//        BufferedReader buffReader = null;
+//        PrintWriter printWriter = null;
+//        ObjectInputStream ooin = null;
         try {
-            ServerSocket listener = new ServerSocket(50001);
-            System.out.println("listening...");
-            while (!isFinished) {
-                Socket client = listener.accept();
+            listener = new ServerSocket(50001);
+                System.out.println("listening...");
+                while (!isFinished) {
+                client = listener.accept();
 
                 InputStream in = client.getInputStream();
                 OutputStream out = client.getOutputStream();
@@ -37,16 +42,35 @@ public class MyServer {
                 ObjectInputStream ooin = new ObjectInputStream(in);
                 LocalDateTime timeNow = (LocalDateTime) ooin.readObject();
                 System.out.println("timestamp: " + timeNow);
-
-                client.close();
             }
-
+            client.close();
             listener.close();
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             System.out.println("closing the server...");
+
+            try {
+//                if (ooin != null) {
+//                    ooin.close();
+//                }
+//                if (buffReader != null) {
+//                    buffReader.close();
+//                }
+//                if (printWriter != null) {
+//                    printWriter.close();
+//                }
+                if (client != null ) {
+                    System.out.println("connected: " + client.isConnected() + " closed: " + client.isClosed());
+                    client.close();
+                }
+                if (listener != null) {
+                    listener.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

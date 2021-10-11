@@ -8,16 +8,15 @@ public class MyClient {
 
     private Socket socket;
 
-    public static void main(String[] args) {
+    public void clientListen(String[] args) {
         try {
-            MyClient client = new MyClient();
             System.out.println("starting the client connection...");
 
-            client.socket = new Socket("localhost", 50001);
-            System.out.println("client connected? " + client.socket.isConnected());
+            this.socket = new Socket("localhost", 50001);
+            System.out.println("client connected? " + this.socket.isConnected());
 
-            InputStream in = client.socket.getInputStream();
-            OutputStream out = client.socket.getOutputStream();
+            InputStream in = this.socket.getInputStream();
+            OutputStream out = this.socket.getOutputStream();
 
             PrintWriter writer = new PrintWriter(out, true);
             writer.println("Hello from " + args[0] + "!");
@@ -31,11 +30,15 @@ public class MyClient {
             oout.writeObject(LocalDateTime.now());
             oout.flush();
 
-            client.socket.close();
-            System.out.println("close the client...");
-
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                System.out.println("close the client...");
+                this.socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
