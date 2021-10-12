@@ -6,12 +6,10 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.channels.SocketChannel;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,9 +25,9 @@ public class TinyHttpdConnection implements Runnable {
     public void run() {
         try {
             LOG.debug("request arrives...");
-            BufferedReader bin = new BufferedReader(new InputStreamReader(client.getInputStream(), "8859_1"));
+            BufferedReader bin = new BufferedReader(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
             OutputStream out = client.getOutputStream();
-            PrintWriter pout = new PrintWriter(new OutputStreamWriter(out, "8859_1"), true);
+            PrintWriter pout = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
 
             String request = bin.readLine();
             if (request != null) {
@@ -43,34 +41,25 @@ public class TinyHttpdConnection implements Runnable {
                         LOG.debug("request ends with / or ''");
                         request = request + "index.html";
                     }
-                    FileSystem fs = FileSystems.getDefault();
                     try {
                         LOG.info("requested file: {}", request);
 
-                        String body = new String(Files.readAllBytes(fs.getPath(request)));
-//                        new FileInputStream("index.html").getChannel()
-//                        try(FileChannel file = FileChannel.open(fs.getPath(request))){
-//                            file.transferTo(0, 0, SocketChannel.open(client.getLocalSocketAddress()));
-//                        }
-
-                        String headerPrefix = "HTTP/1.1 200 OK\n";
-                        byte[] headerPrefBytes = headerPrefix.getBytes();
+                        String body = new String(Files.readAllBytes(Path.of(request)));
+                        byte[] headerPrefBytes = "HTTP/1.1 200 OK\nContent-Type: application/text\n\n".getBytes();
                         byte[] fileContentBytes = body.getBytes();
-                        ByteBuffer buff = ByteBuffer.wrap(new byte[headerPrefBytes.length + fileContentBytes.length]);
-                        LOG.debug("buffer: " + new String(buff.array()));
+                        ByteBuffer buffer = ByteBuffer.allocate(headerPrefBytes.length + fileContentBytes.length);
+                        buffer.put(headerPrefBytes).put(fileContentBytes);
 
-                        buff.put(headerPrefBytes).put(fileContentBytes);
-                        buff.flip();
-                        try (SocketChannel openChannel = SocketChannel.open(client.getLocalSocketAddress())){
-                            while (buff.hasRemaining()){
-                                openChannel.write(buff);
-                            }
+                        InputStream inStr = new ByteArrayInputStream(buffer.array());
+//                        FileInputStream fin = new FileInputStream(request);
+                        byte[] data = new byte[64*1024];
+
+                        for (int read; (read = inStr.read(data)) > -1;){
+                            out.write(data, 0, read);
                         }
-//                        SocketChannel openChannel = SocketChannel.open(client.getLocalSocketAddress());
-//                        openChannel.write(buff);
-//                        openChannel.close();
-                        LOG.debug("channel closed...");
-                        // .transferTo(0,length, SocketChannel.open(client.getLocalSocketAddress()));
+                        out.flush();
+
+                        LOG.debug("server closed...");
                     } catch (NoSuchFileException fe) {
                         LOG.debug("current path {}", System.getProperty("user.dir"));
                         LOG.debug("file {} not found", request);
@@ -78,10 +67,12 @@ public class TinyHttpdConnection implements Runnable {
 
                         //                    fs.close(); // UnsupportedOperationException
                     }
+                    out.close();
                     pout.close();
                     bin.close();
                 } else {
                     LOG.debug("NOT mathed pattern GET /?(\\S*).*");
+                    pout.close();
                     pout.println("400 Bad Request");
                 }
                 client.close();

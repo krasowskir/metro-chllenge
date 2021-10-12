@@ -20,9 +20,6 @@ public class MyServer {
     public void runServer() {
         ServerSocket listener = null;
         Socket client = null;
-//        BufferedReader buffReader = null;
-//        PrintWriter printWriter = null;
-//        ObjectInputStream ooin = null;
         try {
             listener = new ServerSocket(50001);
                 System.out.println("listening...");

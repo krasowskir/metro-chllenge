@@ -8,7 +8,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 class MyServerTest {
 
@@ -132,27 +132,75 @@ class MyServerTest {
         });
         server.start();
 
-        new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-                HttpClient client = HttpClient.newBuilder().build();
-                HttpRequest request = HttpRequest.newBuilder(new URI("http://localhost:50001/"))
-                        .GET()
-                        .version(HttpClient.Version.HTTP_1_1)
-                        .build();
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString(Charset.forName("8859_1")));
-                System.out.println("status: " + response.statusCode());
-                System.out.println("reponse: " + response.body());
+        try {
+            Thread.sleep(3000);
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest reqIndex = HttpRequest.newBuilder(new URI("http://localhost:50001/"))
+                    .GET()
+                    .version(HttpClient.Version.HTTP_1_1)
+                    .build();
+            HttpRequest reqTest = HttpRequest.newBuilder(new URI("http://localhost:50001/test.txt"))
+                    .GET()
+                    .version(HttpClient.Version.HTTP_1_1)
+                    .build();
 
-            } catch (IOException | InterruptedException | URISyntaxException e) {
-                System.out.println("client: " + e.getClass().getName());
-                e.printStackTrace();
-            }
-        }).start();
+            System.out.println("1st request: /index.html");
+            HttpResponse<String> response = client.send(reqIndex, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+            assert 200 == response.statusCode();
+            System.out.println("reponse index.html: " + response.body());
+
+            System.out.println("2nd request: /test.txt");
+            HttpResponse<String> response2 = client.send(reqTest, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+            assert 200 == response2.statusCode();
+            System.out.println("reponse test.txt: " + response2.body());
+
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            System.out.println("client: " + e.getClass().getName());
+            e.printStackTrace();
+        }
         try {
             server.join();
         } catch (InterruptedException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void test_myNIOServer() {
+        MyNioTcpServer server = new MyNioTcpServer();
+        Thread serverT = new Thread(() -> { server.runServer(); });
+        serverT.start();
+
+        Thread t1 = new Thread(() -> {
+            MyNioClient client = new MyNioClient();
+            client.clientListen(new String[]{"Richard"});
+            try {
+                Thread.sleep(1000);
+                server.setFinished(true);
+                client.clientListen(new String[]{"Richard"});
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        t1.start();
+
+        try {
+            t1.join();
+            serverT.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void test_httpClient() {
+        try {
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder(new URI("https://github.com")).GET().build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("resp status: " + response.statusCode() + " body: " + response.body());
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 }
