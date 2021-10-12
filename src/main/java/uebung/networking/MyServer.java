@@ -52,15 +52,6 @@ public class MyServer {
             System.out.println("closing the server...");
 
             try {
-//                if (ooin != null) {
-//                    ooin.close();
-//                }
-//                if (buffReader != null) {
-//                    buffReader.close();
-//                }
-//                if (printWriter != null) {
-//                    printWriter.close();
-//                }
                 if (client != null ) {
                     System.out.println("connected: " + client.isConnected() + " closed: " + client.isClosed());
                     client.close();

@@ -40,6 +40,5 @@ public class MyClient {
                 e.printStackTrace();
             }
         }
-
     }
 }
