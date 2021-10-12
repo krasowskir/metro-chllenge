@@ -5,10 +5,12 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class FilesOperations {
 
-    public void listFiles(String dir){
+    public void walkFiles(String dir){
         if (dir != null){
             Paths.get(dir).forEach(System.out::println);
         } else {
@@ -33,4 +35,30 @@ public class FilesOperations {
 
         }
     }
+
+    public String readFile(String name){
+        String text = null;
+        try {
+            text = new String(Files.readAllBytes(Paths.get(name)));
+            System.out.println("=== text: ===");
+            System.out.println(text);
+//            FileChannel fin = FileChannel.open(Paths.get(name));
+//            ByteBuffer buff =
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return text;
+    }
+
+    public List<String> listFiles(String dir){
+        try {
+            return Files.list(Path.of(dir))
+                    .map(e -> e.getFileName().toString())
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
