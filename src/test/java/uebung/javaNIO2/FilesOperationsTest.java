@@ -26,4 +26,13 @@ class FilesOperationsTest {
         String result = appl.readFile("test.txt");
         System.out.println("result: " +result);
     }
+
+    @Test
+    void test_readFileFromChannel() {
+        System.out.println("===== readFilesViaByteBuffer =====");
+        FilesOperations appl = new FilesOperations();
+        String result = appl.readFilesViaByteBuffer("test.txt");
+        System.out.println("=====");
+        System.out.println("result: " +result);
+    }
 }
