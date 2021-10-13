@@ -3,7 +3,6 @@ package uebung.javaNIO2;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,10 +39,6 @@ public class FilesOperations {
         String text = null;
         try {
             text = new String(Files.readAllBytes(Paths.get(name)));
-            System.out.println("=== text: ===");
-            System.out.println(text);
-//            FileChannel fin = FileChannel.open(Paths.get(name));
-//            ByteBuffer buff =
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,26 +56,34 @@ public class FilesOperations {
         return null;
     }
 
-    public String readFilesViaByteBuffer(String name){
+    public String readFilesViaByteBuffer(String name) {
 
         try {
-            ByteBuffer buffer = ByteBuffer.allocate(25);
+            int readSize = 25;
+            ByteBuffer buffer = ByteBuffer.allocate(readSize);
             byte[] contentBytes = Files.readAllBytes(Path.of(name));
             System.out.println("=========");
             System.out.println("content: " + new String(contentBytes) + " length: " + contentBytes.length);
             System.out.println("=========\n");
 
-            try (FileChannel fch = FileChannel.open(Path.of(name), StandardOpenOption.READ)){
+            try (FileChannel fch = FileChannel.open(Path.of(name), StandardOpenOption.READ)) {
 
                 StringBuilder strB = new StringBuilder();
 
                 int bytesRead;
-                while ((bytesRead = fch.read(buffer)) != -1){
-                    System.out.println(String.format("bytes %d read from file",bytesRead));
-                    System.out.println(String.format("buffer position: %d, limit: %d, capacity: %d",buffer.position(), buffer.limit(), buffer.capacity()));
+                while ((bytesRead = fch.read(buffer)) != -1) {
+                    System.out.println(String.format("bytes %d read from file", bytesRead));
+                    System.out.println(String.format("buffer position: %d, limit: %d, capacity: %d", buffer.position(), buffer.limit(), buffer.capacity()));
 //                    buffer.rewind(); //buffer position: 0, limit: 1024, capacity: 1024
-//                    buffer.flip(); //buffer position: 0, limit: 60, capacity: 1024
-                    strB.append(new String(buffer.flip().array()));
+//                    buffer.flip();  //buffer position: 0, limit: 60, capacity: 1024
+                    if (bytesRead < readSize) {
+                        byte[] restData = new byte[bytesRead];
+                        buffer.flip().get(restData);
+                        strB.append(new String(restData));
+                        buffer.clear();
+                    } else {
+                        strB.append(new String(buffer.flip().array()));
+                    }
                 }
                 return strB.toString();
             }
