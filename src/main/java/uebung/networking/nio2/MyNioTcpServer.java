@@ -1,4 +1,4 @@
-package uebung.networking;
+package uebung.networking.nio2;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

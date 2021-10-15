@@ -1,6 +1,10 @@
 package uebung.networking;
 
 import org.junit.jupiter.api.Test;
+import uebung.networking.nio2.MyNioClient;
+import uebung.networking.nio2.MyNioTcpServer;
+import uebung.networking.udp.HeartBeat;
+import uebung.networking.udp.Pulse;
 
 import java.io.IOException;
 import java.net.URI;
@@ -121,44 +125,60 @@ class MyServerTest {
     }
 
     @Test
-    void test_TinyHttpd() {
-        System.out.println("==== test_TinyHttpd ====");
+    void test_TcpHttpd() {
+        System.out.println("==== test_TcpHttpd ====");
        Thread server = new Thread(() -> {
             try {
-                TinyHttpd.main(new String[]{"50001"});
+                TcpHttpd.main(new String[]{"50001"});
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         server.start();
 
+        Thread killTh = new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            server.stop();
+        });
+        killTh.start();
+
+        Thread clientOperations = new Thread(() ->{
+            try {
+                Thread.sleep(1000);
+                HttpClient client = HttpClient.newBuilder().build();
+                HttpRequest reqIndex = HttpRequest.newBuilder(new URI("http://localhost:50001/"))
+                        .GET()
+                        .version(HttpClient.Version.HTTP_1_1)
+                        .build();
+                HttpRequest reqTest = HttpRequest.newBuilder(new URI("http://localhost:50001/test.txt"))
+                        .GET()
+                        .version(HttpClient.Version.HTTP_1_1)
+                        .build();
+
+                System.out.println("1st request: /index.html");
+                HttpResponse<String> response = client.send(reqIndex, HttpResponse.BodyHandlers.ofString());
+                assert 200 == response.statusCode();
+                System.out.println("reponse index.html: " + response.body());
+
+                System.out.println("2nd request: /test.txt");
+                HttpResponse<String> response2 = client.send(reqTest, HttpResponse.BodyHandlers.ofString());
+                assert 200 == response2.statusCode();
+                System.out.println("reponse test.txt: " + response2.body());
+
+            } catch (IOException | InterruptedException | URISyntaxException e) {
+                System.out.println("client: " + e.getClass().getName());
+                e.printStackTrace();
+            }
+
+        });
+        clientOperations.start();
         try {
-            Thread.sleep(3000);
-            HttpClient client = HttpClient.newBuilder().build();
-            HttpRequest reqIndex = HttpRequest.newBuilder(new URI("http://localhost:50001/"))
-                    .GET()
-                    .version(HttpClient.Version.HTTP_1_1)
-                    .build();
-            HttpRequest reqTest = HttpRequest.newBuilder(new URI("http://localhost:50001/test.txt"))
-                    .GET()
-                    .version(HttpClient.Version.HTTP_1_1)
-                    .build();
-
-            System.out.println("1st request: /index.html");
-            HttpResponse<String> response = client.send(reqIndex, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
-            assert 200 == response.statusCode();
-            System.out.println("reponse index.html: " + response.body());
-
-            System.out.println("2nd request: /test.txt");
-            HttpResponse<String> response2 = client.send(reqTest, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
-            assert 200 == response2.statusCode();
-            System.out.println("reponse test.txt: " + response2.body());
-
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            System.out.println("client: " + e.getClass().getName());
-            e.printStackTrace();
-        }
-        try {
+            clientOperations.join();
+            killTh.join();
             server.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -202,5 +222,56 @@ class MyServerTest {
         } catch (IOException | InterruptedException | URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void test_udpHeartbeatPulse() {
+        HeartBeat heartBeat = new HeartBeat("localhost", 50000, 0, 50);
+        HeartBeat heartBeat2 = new HeartBeat("localhost", 50000, 1000, 30);
+        HeartBeat heartBeat3 = new HeartBeat("localhost", 50000, 10000, 20);
+
+        Thread hb = new Thread(() -> { heartBeat.start(); });
+
+        Thread hb2 = new Thread(() -> { heartBeat2.start(); });
+
+        Thread hb3 = new Thread(() -> { heartBeat3.start(); });
+
+        Thread p = new Thread(() -> {
+            try {
+                Pulse.main(new String[]{"50000"});
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        p.start();
+
+        hb.start();
+        hb2.start();
+        hb3.start();
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+                heartBeat.stop();
+                heartBeat.setDone(true);
+                heartBeat2.stop();
+                heartBeat2.setDone(true);
+                heartBeat3.stop();
+                heartBeat3.setDone(true);
+                p.stop();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        try {
+            hb.join();
+            hb2.join();
+            hb3.join();
+            p.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }

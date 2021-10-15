@@ -22,6 +22,7 @@ class FilesOperationsTest {
 
     @Test
     void test_readFile() {
+        System.out.println("===== readFile =====");
         FilesOperations appl = new FilesOperations();
         String result = appl.readFile("test.txt");
         System.out.println("result: " +result);
@@ -34,5 +35,7 @@ class FilesOperationsTest {
         String result = appl.readFilesViaByteBuffer("test.txt");
         System.out.println("=====");
         System.out.println("result: " +result);
+
+        assert appl.readFile("test.txt").equals(appl.readFilesViaByteBuffer("test.txt"));
     }
 }
